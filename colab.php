@@ -1,11 +1,11 @@
 <?php
 
-require('./dao/MotoristaDAO.class.php');
+require('./dao/ColabDAO.class.php');
 
-$motoristaDAO = new MotoristaDAO();
+$colabDAO = new ColabDAO();
 
 //cria o array associativo
-$dados = array("dados"=>$motoristaDAO->dados());
+$dados = array("dados"=>$colabDAO->dados());
 
 //converte o conteúdo do array associativo para uma string JSON
 $json_str = json_encode($dados);
