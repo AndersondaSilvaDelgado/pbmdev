@@ -7,13 +7,13 @@
  */
 require_once 'Conn.class.php';
 /**
- * Description of ColaboradorDAO
+ * Description of ComponenteDAO
  *
  * @author anderson
  */
-class ColabDAO extends Conn {
+class ComponenteDAO extends Conn {
     //put your code here
-    
+
     /** @var PDOStatement */
     private $Read;
 
@@ -23,15 +23,15 @@ class ColabDAO extends Conn {
     public function dados() {
 
         $select = " SELECT "
-                    . " FUNC_ID AS \"idColab\" "
-                    . " , CD AS \"matricColab\" "
-                    . " , NOME AS \"nomeColab\" "
+                . " COMPONENTE_ID AS \"idComponente\" "
+                . " , CD AS \"codComponente\" "
+                . " , DESCR AS \"descrComponente\" "
                 . " FROM "
-                    . " USINAS.VMB_FUNC_AUTO "
+                . " VMB_COMPONENTE_AUTO "
                 . " ORDER BY "
-                    . " CD "
+                . " CD "
                 . " ASC ";
-        
+
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
@@ -40,5 +40,5 @@ class ColabDAO extends Conn {
 
         return $result;
     }
-    
+
 }
