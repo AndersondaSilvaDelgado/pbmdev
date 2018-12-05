@@ -24,16 +24,6 @@ class ServicoDAO extends Conn {
     public function dados() {
 
         $select = " SELECT "
-                . " MOTPARMEC_ID AS \"idParada\" "
-                . " , CD AS \"codParada\" "
-                . " , CARACTER(DESCR) AS \"descrParada\" "
-                . " FROM "
-                . " VMB_PARADA_AUTO "
-                . " ORDER BY "
-                . " CD "
-                . " ASC ";
-
-        $select = " SELECT "
                 . " SERVICO_ID AS \"idServico\" "
                 . " , CD AS \"codServico\" "
                 . " , DESCR AS \"descrServico\" "
