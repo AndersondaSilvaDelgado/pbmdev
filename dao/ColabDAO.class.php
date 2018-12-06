@@ -12,7 +12,6 @@ require_once 'Conn.class.php';
  * @author anderson
  */
 class ColabDAO extends Conn {
-    //put your code here
     
     /** @var PDOStatement */
     private $Read;

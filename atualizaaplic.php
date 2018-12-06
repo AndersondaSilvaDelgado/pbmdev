@@ -10,7 +10,7 @@ if (isset($info)):
     //$dados = '{"dados":[{"idEquipAtualizacao":663,"versaoAtual":"1.1"}]}';
     
     $jsonObj = json_decode($info['dado']);
-    //$jsonObj = json_decode($dados); //Teste
+    //$jsonObj = json_decode($dados); Teste
     $dados = $jsonObj->dados;
     $retorno = $atualizaAplicDAO->pesqInfo($dados);
     
