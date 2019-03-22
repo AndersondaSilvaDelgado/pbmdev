@@ -25,7 +25,7 @@ class ColabDAO extends Conn {
                     . " F.FUNC_ID AS \"idColab\" "
                     . " , F.CD AS \"matricColab\" "
                     . " , F.NOME AS \"nomeColab\" "
-                    . " , E.ESCALATRAB_ID AS \"idEscala\" "
+                    . " , E.ESCALATRAB_ID AS \"idEscalaTrabColab\" "
                 . " FROM "
                     . " USINAS.VMB_FUNC_AUTO F "
                     . " , USINAS.VMB_FUNC_ESCALA E "

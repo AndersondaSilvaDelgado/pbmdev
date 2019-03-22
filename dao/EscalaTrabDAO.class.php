@@ -23,9 +23,9 @@ class EscalaTrabDAO extends Conn {
     public function dados() {
 
         $select = " SELECT DISTINCT "
-                    . " E.ESCALATRAB_ID AS \"idColab\" "
-                    . " , E.HR_ENT1 AS \"matricColab\" "
-                    . " , E.HR_SAI2 \"nomeColab\" "
+                    . " E.ESCALATRAB_ID AS \"idEscalaTrab\" "
+                    . " , LPAD(E.HR_ENT1, 5, '0') AS \"horarioEntEscalaTrab\" "
+                    . " , LPAD(E.HR_SAI2, 5, '0') AS \"horarioSaiEscalaTrab\" "
                 . " FROM "
                     . " USINAS.VMB_FUNC_AUTO F "
                     . " , USINAS.VMB_FUNC_ESCALA FE "
