@@ -32,7 +32,7 @@ class EscalaTrabDAO extends Conn {
                     . " , USINAS.VMB_ESCALA_TRAB E "
                 . " WHERE "
                     . " F.FUNC_ID = FE.FUNC_ID "
-                    . " AND FE.ESCALATRAB_ID = E.ESCALATRAB_ID";
+                    . " AND FE.ESCALATRAB_ID = E.ESCALATRAB_ID ";
         
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);

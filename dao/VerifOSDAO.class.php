@@ -31,7 +31,7 @@ class VerifOSDAO extends Conn {
                 . " WHERE "
                     . " NRO = " . $valor;
 //                    . " AND DT_PREV_INIC <= SYSDATE " 
-//                    . " AND DT_PREV_TERM >= SYSDATE - 1 " ;;
+//                    . " AND DT_PREV_TERM >= SYSDATE - 1 " ;
         
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);

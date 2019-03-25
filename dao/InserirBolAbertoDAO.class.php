@@ -127,7 +127,7 @@ class InserirBolAbertoDAO extends Conn {
                             $this->Create = $this->Conn->prepare($sql);
                             $this->Create->execute();
                             
-                        } elseif (($v > 0) && ($apont->statusItemAponta == 2)) {
+                        } elseif (($v > 0) && ($apont->statusAponta == 3)) {
 
                             $sql = "UPDATE PBM_APONTAMENTO"
                                     . " SET IND_REALIZ = 1 "
@@ -207,7 +207,8 @@ class InserirBolAbertoDAO extends Conn {
 
                             $this->Create = $this->Conn->prepare($sql);
                             $this->Create->execute();
-                        } elseif (($v > 0) && ($apont->statusItemAponta == 2)) {
+                            
+                        } elseif (($v > 0) && ($apont->statusAponta == 3)) {
 
                             $sql = "UPDATE PBM_APONTAMENTO"
                                     . " SET IND_REALIZ = 1 "
