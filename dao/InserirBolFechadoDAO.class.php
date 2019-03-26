@@ -12,7 +12,7 @@ require_once 'Conn.class.php';
  *
  * @author anderson
  */
-class InsBolFechadoDAO extends Conn {
+class InserirBolFechadoDAO extends Conn {
     //put your code here
 
     /** @var PDOStatement */
@@ -32,7 +32,7 @@ class InsBolFechadoDAO extends Conn {
                     . " FROM "
                     . " PBM_BOLETIM "
                     . " WHERE "
-                    . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicioBoletim . "','DD/MM/YYYY HH24:MI') "
+                    . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                     . " AND "
                     . " FUNC_ID = " . $bol->idFuncBoletim . " ";
 
@@ -49,13 +49,17 @@ class InsBolFechadoDAO extends Conn {
 
                 $sql = "INSERT INTO PBM_BOLETIM ("
                         . " FUNC_ID "
-                        . " , DTHR_INICIAL_CEL "
+                        . " , DTHR_CEL_INICIAL "
                         . " , DTHR_TRANS_INICIAL "
+                        . " , DTHR_CEL_FINAL "
+                        . " , DTHR_TRANS_FINAL "
                         . " , STATUS "
                         . " ) "
                         . " VALUES ("
                         . " " . $bol->idFuncBoletim
-                        . " , TO_DATE('" . $bol->dthrInicioBoletim . "','DD/MM/YYYY HH24:MI') "
+                        . " , TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
+                        . " , SYSDATE "
+                        . " , TO_DATE('" . $bol->dthrFinalBoletim . "','DD/MM/YYYY HH24:MI') "
                         . " , SYSDATE "
                         . " , 2 "
                         . " )";
@@ -68,7 +72,7 @@ class InsBolFechadoDAO extends Conn {
                         . " FROM "
                         . " PBM_BOLETIM "
                         . " WHERE "
-                        . " DTHR_INICIAL_CEL = TO_DATE('" . $bol->dthrInicioBoletim . "','DD/MM/YYYY HH24:MI') "
+                        . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                         . " AND "
                         . " FUNC_ID = " . $bol->idFuncBoletim . " ";
 
@@ -78,19 +82,19 @@ class InsBolFechadoDAO extends Conn {
                 $res2 = $this->Read->fetchAll();
 
                 foreach ($res2 as $item2) {
-                    $idBol= $item2['ID'];
+                    $idBol = $item2['ID'];
                 }
 
                 foreach ($dadosAponta as $apont) {
 
-                    if ($bol->idBoletim == $apont->idBolAponta) {
+                    if ($bol->idBoletim == $apont->idBolApont) {
 
                         $select = " SELECT "
                                 . " COUNT(*) AS QTDE "
                                 . " FROM "
                                 . " PBM_APONTAMENTO "
                                 . " WHERE "
-                                . " DTHR_CEL = TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI') "
+                                . " DTHR_CEL = TO_DATE('" . $apont->dthrApont . "','DD/MM/YYYY HH24:MI') "
                                 . " AND "
                                 . " BOLETIM_ID = " . $idBol . " ";
 
@@ -110,47 +114,53 @@ class InsBolFechadoDAO extends Conn {
                                     . " , OS_NRO "
                                     . " , ATIVAGR_ID "
                                     . " , MOTPARADA_ID "
-                                    . " , DTHR_CEL "
-                                    . " , DTHR_TRANS "
+                                    . " , DTHR_CEL_INICIAL "
+                                    . " , DTHR_TRANS_INICIAL "
+                                    . " , DTHR_CEL_FINAL "
+                                    . " , DTHR_TRANS_FINAL "
                                     . " , IND_REALIZ "
                                     . " ) "
                                     . " VALUES ("
                                     . " " . $idBol
-                                    . " , " . $apont->osAponta
-                                    . " , " . $apont->itemOSAponta
-                                    . " , " . $apont->paradaAponta
-                                    . " , TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI')"
+                                    . " , " . $apont->osApont
+                                    . " , " . $apont->itemOSApont
+                                    . " , " . $apont->paradaApont
+                                    . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                                     . " , SYSDATE "
-                                    . " , 0 "
+                                    . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
+                                    . " , SYSDATE "
+                                    . " , " . $apont->realizApont
                                     . " )";
 
                             $this->Create = $this->Conn->prepare($sql);
                             $this->Create->execute();
                             
-                        } elseif (($v > 0) && ($apont->statusAponta == 3)) {
+                        } else {
 
-                            $sql = "UPDATE PBM_APONTAMENTO"
-                                    . " SET IND_REALIZ = 1 "
-                                    . " WHERE "
-                                    . " DTHR_CEL = TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI') "
-                                    . " AND "
-                                    . " BOLETIM_ID = " . $idBol . " ";
+                            if ($apont->dthrFinalApont != "") {
 
-                            $this->Create = $this->Conn->prepare($sql);
-                            $this->Create->execute();
-                            
+                                $sql = "UPDATE PBM_APONTAMENTO"
+                                        . " SET "
+                                        . " DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
+                                        . " , DTHR_TRANS_FINAL = SYSDATE "
+                                        . " , IND_REALIZ = " . $apont->realizApont
+                                        . " WHERE "
+                                        . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
+                                        . " AND "
+                                        . " BOLETIM_ID = " . $idBol . " ";
+
+                                $this->Create = $this->Conn->prepare($sql);
+                                $this->Create->execute();
+                            }
                         }
-                        
                     }
-                    
                 }
-                
             } else {
 
                 $sql = "UPDATE PBM_BOLETIM "
                         . " SET "
                         . " STATUS = " . $bol->statusBoletim
-                        . " , DTHR_CEL_FINAL = TO_DATE('" . $bol->dthrFimBoletim . "','DD/MM/YYYY HH24:MI')"
+                        . " , DTHR_CEL_FINAL = TO_DATE('" . $bol->dthrFinalBoletim . "','DD/MM/YYYY HH24:MI')"
                         . " , DTHR_TRANS_FINAL = SYSDATE "
                         . " WHERE "
                         . " ID = " . $bol->idExtBoletim;
@@ -163,7 +173,7 @@ class InsBolFechadoDAO extends Conn {
                         . " FROM "
                         . " PBM_BOLETIM "
                         . " WHERE "
-                        . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicioBoletim . "','DD/MM/YYYY HH24:MI') "
+                        . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                         . " AND "
                         . " FUNC_ID = " . $bol->idFuncBoletim . " ";
 
@@ -178,14 +188,14 @@ class InsBolFechadoDAO extends Conn {
 
                 foreach ($dadosAponta as $apont) {
 
-                    if ($bol->idBoletim == $apont->idBolAponta) {
+                    if ($bol->idBoletim == $apont->idBolApont) {
 
                         $select = " SELECT "
                                 . " COUNT(*) AS QTDE "
                                 . " FROM "
                                 . " PBM_APONTAMENTO "
                                 . " WHERE "
-                                . " DTHR_CEL = TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI') "
+                                . " DTHR_CEL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
                                 . " AND "
                                 . " BOLETIM_ID = " . $idBol . " ";
 
@@ -205,45 +215,50 @@ class InsBolFechadoDAO extends Conn {
                                     . " , OS_NRO "
                                     . " , ATIVAGR_ID "
                                     . " , MOTPARADA_ID "
-                                    . " , DTHR_CEL "
-                                    . " , DTHR_TRANS "
+                                    . " , DTHR_CEL_INICIAL "
+                                    . " , DTHR_TRANS_INICIAL "
+                                    . " , DTHR_CEL_FINAL "
+                                    . " , DTHR_TRANS_FINAL "
                                     . " , IND_REALIZ "
                                     . " ) "
                                     . " VALUES ("
                                     . " " . $idBol
-                                    . " , " . $apont->osAponta
-                                    . " , " . $apont->itemOSAponta
-                                    . " , " . $apont->paradaAponta
-                                    . " , TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI')"
+                                    . " , " . $apont->osApont
+                                    . " , " . $apont->itemOSApont
+                                    . " , " . $apont->paradaApont
+                                    . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                                     . " , SYSDATE "
-                                    . " , 0 "
+                                    . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
+                                    . " , SYSDATE "
+                                    . " , " . $apont->realizApont
                                     . " )";
 
                             $this->Create = $this->Conn->prepare($sql);
                             $this->Create->execute();
                             
-                        } elseif (($v > 0) && ($apont->statusAponta == 3)) {
+                        } else {
 
-                            $sql = "UPDATE PBM_APONTAMENTO"
-                                    . " SET IND_REALIZ = 1 "
-                                    . " WHERE "
-                                    . " DTHR_CEL = TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI') "
-                                    . " AND "
-                                    . " BOLETIM_ID = " . $idBol . " ";
+                            if ($apont->dthrFinalApont != "") {
 
-                            $this->Create = $this->Conn->prepare($sql);
-                            $this->Create->execute();
-                            
+                                $sql = "UPDATE PBM_APONTAMENTO"
+                                        . " SET "
+                                        . " DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
+                                        . " , DTHR_TRANS_FINAL = SYSDATE "
+                                        . " , IND_REALIZ = " . $apont->realizApont
+                                        . " WHERE "
+                                        . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
+                                        . " AND "
+                                        . " BOLETIM_ID = " . $idBol . " ";
+
+                                $this->Create = $this->Conn->prepare($sql);
+                                $this->Create->execute();
+                            }
                         }
-                        
                     }
-                    
                 }
-
             }
         }
 
-        return 'GRAVOU-BOLFECHADO';
     }
 
 }

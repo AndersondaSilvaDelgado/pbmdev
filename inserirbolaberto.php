@@ -16,7 +16,7 @@ if (isset($info)):
     $inserirDadosDAO->salvarDados($dados, "inserirbolaberto");
     $pos1 = strpos($dados, "_") + 1;
     $b = substr($dados, 0, ($pos1 - 1));
-    $a = substr($dados, $pos1, (($pos2 - 1) - $pos1));
+    $a = substr($dados, $pos1);
   
     $jsonObjBoletim = json_decode($b);
     $jsonObjAponta = json_decode($a);

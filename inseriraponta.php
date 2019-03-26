@@ -6,7 +6,7 @@ require('./dao/InserirDadosDAO.class.php');
 $inserirBolAbertoDAO = new InserirBolAbertoDAO();
 $inserirDadosDAO = new InserirDadosDAO();
 $info = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-$retorno = '';
+
 
 if (isset($info)):
 
@@ -18,8 +18,8 @@ if (isset($info)):
     $jsonObjAponta = json_decode($dados);
     $dadosAponta = $jsonObjAponta->aponta;
     
-    $retorno = $inserirApontDAO->salvarDados($dadosAponta);
+    $inserirApontDAO->salvarDados($dadosAponta);
 
-    echo $retorno;
+    echo 'GRAVOUAPONTA';
 
 endif;

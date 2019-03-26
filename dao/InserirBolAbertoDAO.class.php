@@ -32,7 +32,7 @@ class InserirBolAbertoDAO extends Conn {
                     . " FROM "
                     . " PBM_BOLETIM "
                     . " WHERE "
-                    . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicioBoletim . "','DD/MM/YYYY HH24:MI') "
+                    . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                     . " AND "
                     . " FUNC_ID = " . $bol->idFuncBoletim . " ";
 
@@ -55,7 +55,7 @@ class InserirBolAbertoDAO extends Conn {
                         . " ) "
                         . " VALUES ("
                         . " " . $bol->idFuncBoletim
-                        . " , TO_DATE('" . $bol->dthrInicioBoletim . "','DD/MM/YYYY HH24:MI') "
+                        . " , TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                         . " , SYSDATE "
                         . " , 1 "
                         . " )";
@@ -68,7 +68,7 @@ class InserirBolAbertoDAO extends Conn {
                         . " FROM "
                         . " PBM_BOLETIM "
                         . " WHERE "
-                        . " DTHR_INICIAL_CEL = TO_DATE('" . $bol->dthrInicioBoletim . "','DD/MM/YYYY HH24:MI') "
+                        . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                         . " AND "
                         . " FUNC_ID = " . $bol->idFuncBoletim . " ";
 
@@ -83,14 +83,14 @@ class InserirBolAbertoDAO extends Conn {
 
                 foreach ($dadosAponta as $apont) {
 
-                    if ($bol->idBoletim == $apont->idBolAponta) {
+                    if ($bol->idBoletim == $apont->idBolApont) {
 
                         $select = " SELECT "
                                 . " COUNT(*) AS QTDE "
                                 . " FROM "
                                 . " PBM_APONTAMENTO "
                                 . " WHERE "
-                                . " DTHR_CEL = TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI') "
+                                . " DTHR_CEL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
                                 . " AND "
                                 . " BOLETIM_ID = " . $idBol . " ";
 
@@ -105,40 +105,76 @@ class InserirBolAbertoDAO extends Conn {
 
                         if ($v == 0) {
 
-                            $sql = "INSERT INTO PBM_APONTAMENTO ("
-                                    . " BOLETIM_ID "
-                                    . " , OS_NRO "
-                                    . " , ATIVAGR_ID "
-                                    . " , MOTPARADA_ID "
-                                    . " , DTHR_CEL "
-                                    . " , DTHR_TRANS "
-                                    . " , IND_REALIZ "
-                                    . " ) "
-                                    . " VALUES ("
-                                    . " " . $idBol
-                                    . " , " . $apont->osAponta
-                                    . " , " . $apont->itemOSAponta
-                                    . " , " . $apont->paradaAponta
-                                    . " , TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI')"
-                                    . " , SYSDATE "
-                                    . " , 0 "
-                                    . " )";
+                            if ($apont->dthrFinalApont == "") {
+
+                                $sql = "INSERT INTO PBM_APONTAMENTO ("
+                                        . " BOLETIM_ID "
+                                        . " , OS_NRO "
+                                        . " , ATIVAGR_ID "
+                                        . " , MOTPARADA_ID "
+                                        . " , DTHR_CEL_INICIAL "
+                                        . " , DTHR_TRANS_INICIAL "
+                                        . " , DTHR_CEL_FINAL "
+                                        . " , DTHR_TRANS_FINAL "
+                                        . " , IND_REALIZ "
+                                        . " ) "
+                                        . " VALUES ("
+                                        . " " . $idBol
+                                        . " , " . $apont->osApont
+                                        . " , " . $apont->itemOSApont
+                                        . " , " . $apont->paradaApont
+                                        . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
+                                        . " , SYSDATE "
+                                        . " , NULL "
+                                        . " , NULL "
+                                        . " , " . $apont->realizApont
+                                        . " )";
+                            } else {
+
+                                $sql = "INSERT INTO PBM_APONTAMENTO ("
+                                        . " BOLETIM_ID "
+                                        . " , OS_NRO "
+                                        . " , ATIVAGR_ID "
+                                        . " , MOTPARADA_ID "
+                                        . " , DTHR_CEL_INICIAL "
+                                        . " , DTHR_TRANS_INICIAL "
+                                        . " , DTHR_CEL_FINAL "
+                                        . " , DTHR_TRANS_FINAL "
+                                        . " , IND_REALIZ "
+                                        . " ) "
+                                        . " VALUES ("
+                                        . " " . $idBol
+                                        . " , " . $apont->osApont
+                                        . " , " . $apont->itemOSApont
+                                        . " , " . $apont->paradaApont
+                                        . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
+                                        . " , SYSDATE "
+                                        . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
+                                        . " , SYSDATE "
+                                        . " , " . $apont->realizApont
+                                        . " )";
+                            }
 
                             $this->Create = $this->Conn->prepare($sql);
                             $this->Create->execute();
                             
-                        } elseif (($v > 0) && ($apont->statusAponta == 3)) {
+                        } else {
 
-                            $sql = "UPDATE PBM_APONTAMENTO"
-                                    . " SET IND_REALIZ = 1 "
-                                    . " WHERE "
-                                    . " DTHR_CEL = TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI') "
-                                    . " AND "
-                                    . " BOLETIM_ID = " . $idBol . " ";
+                            if ($apont->dthrFinalApont != "") {
 
-                            $this->Create = $this->Conn->prepare($sql);
-                            $this->Create->execute();
-                            
+                                $sql = "UPDATE PBM_APONTAMENTO"
+                                        . " SET "
+                                        . " DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
+                                        . " , DTHR_TRANS_FINAL = SYSDATE "
+                                        . " , IND_REALIZ = " . $apont->realizApont
+                                        . " WHERE "
+                                        . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
+                                        . " AND "
+                                        . " BOLETIM_ID = " . $idBol . " ";
+
+                                $this->Create = $this->Conn->prepare($sql);
+                                $this->Create->execute();
+                            }
                         }
                     }
                 }
@@ -149,7 +185,7 @@ class InserirBolAbertoDAO extends Conn {
                         . " FROM "
                         . " PBM_BOLETIM "
                         . " WHERE "
-                        . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicioBoletim . "','DD/MM/YYYY HH24:MI') "
+                        . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                         . " AND "
                         . " FUNC_ID = " . $bol->idFuncBoletim . " ";
 
@@ -164,14 +200,14 @@ class InserirBolAbertoDAO extends Conn {
 
                 foreach ($dadosAponta as $apont) {
 
-                    if ($bol->idBoletim == $apont->idBolAponta) {
+                    if ($bol->idBoletim == $apont->idBolApont) {
 
                         $select = " SELECT "
                                 . " COUNT(*) AS QTDE "
                                 . " FROM "
                                 . " PBM_APONTAMENTO "
                                 . " WHERE "
-                                . " DTHR_CEL = TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI') "
+                                . " DTHR_CEL = TO_DATE('" . $apont->dthrApont . "','DD/MM/YYYY HH24:MI') "
                                 . " AND "
                                 . " BOLETIM_ID = " . $idBol . " ";
 
@@ -186,46 +222,92 @@ class InserirBolAbertoDAO extends Conn {
 
                         if ($v == 0) {
 
-                            $sql = "INSERT INTO PBM_APONTAMENTO ("
-                                    . " BOLETIM_ID "
-                                    . " , OS_NRO "
-                                    . " , ATIVAGR_ID "
-                                    . " , MOTPARADA_ID "
-                                    . " , DTHR_CEL "
-                                    . " , DTHR_TRANS "
-                                    . " , IND_REALIZ "
-                                    . " ) "
-                                    . " VALUES ("
-                                    . " " . $idBol
-                                    . " , " . $apont->osAponta
-                                    . " , " . $apont->itemOSAponta
-                                    . " , " . $apont->paradaAponta
-                                    . " , TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI')"
-                                    . " , SYSDATE "
-                                    . " , 0 "
-                                    . " )";
+                            if ($apont->dthrFinalApont == "") {
+
+                                $sql = "INSERT INTO PBM_APONTAMENTO ("
+                                        . " BOLETIM_ID "
+                                        . " , OS_NRO "
+                                        . " , ATIVAGR_ID "
+                                        . " , MOTPARADA_ID "
+                                        . " , DTHR_CEL_INICIAL "
+                                        . " , DTHR_TRANS_INICIAL "
+                                        . " , DTHR_CEL_FINAL "
+                                        . " , DTHR_TRANS_FINAL "
+                                        . " , IND_REALIZ "
+                                        . " ) "
+                                        . " VALUES ("
+                                        . " " . $idBol
+                                        . " , " . $apont->osApont
+                                        . " , " . $apont->itemOSApont
+                                        . " , " . $apont->paradaApont
+                                        . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
+                                        . " , SYSDATE "
+                                        . " , NULL "
+                                        . " , NULL "
+                                        . " , " . $apont->realizApont
+                                        . " )";
+                            } else {
+
+                                $sql = "INSERT INTO PBM_APONTAMENTO ("
+                                        . " BOLETIM_ID "
+                                        . " , OS_NRO "
+                                        . " , ATIVAGR_ID "
+                                        . " , MOTPARADA_ID "
+                                        . " , DTHR_CEL_INICIAL "
+                                        . " , DTHR_TRANS_INICIAL "
+                                        . " , DTHR_CEL_FINAL "
+                                        . " , DTHR_TRANS_FINAL "
+                                        . " , IND_REALIZ "
+                                        . " ) "
+                                        . " VALUES ("
+                                        . " " . $idBol
+                                        . " , " . $apont->osApont
+                                        . " , " . $apont->itemOSApont
+                                        . " , " . $apont->paradaApont
+                                        . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
+                                        . " , SYSDATE "
+                                        . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
+                                        . " , SYSDATE "
+                                        . " , " . $apont->realizApont
+                                        . " )";
+                            }
 
                             $this->Create = $this->Conn->prepare($sql);
                             $this->Create->execute();
                             
-                        } elseif (($v > 0) && ($apont->statusAponta == 3)) {
+                        } else {
 
-                            $sql = "UPDATE PBM_APONTAMENTO"
-                                    . " SET IND_REALIZ = 1 "
-                                    . " WHERE "
-                                    . " DTHR_CEL = TO_DATE('" . $apont->dthrAponta . "','DD/MM/YYYY HH24:MI') "
-                                    . " AND "
-                                    . " BOLETIM_ID = " . $idBol . " ";
+                            if ($apont->dthrFinalApont != "") {
 
-                            $this->Create = $this->Conn->prepare($sql);
-                            $this->Create->execute();
+                                $sql = "UPDATE PBM_APONTAMENTO"
+                                        . " SET "
+                                        . " DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalAponta . "','DD/MM/YYYY HH24:MI') "
+                                        . " , DTHR_TRANS_FINAL = SYSDATE "
+                                        . " , IND_REALIZ = " . $apont->realizAponta
+                                        . " WHERE "
+                                        . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialAponta . "','DD/MM/YYYY HH24:MI') "
+                                        . " AND "
+                                        . " BOLETIM_ID = " . $idBol . " ";
+
+                                $this->Create = $this->Conn->prepare($sql);
+                                $this->Create->execute();
+                            }
                         }
                     }
                 }
             }
-        }
 
-        return "GRAVOU+id=" . $idBol . "_";
+            $dados[] = array(
+                "idBoletim" => $bol->idBoletim,
+                "idExtBoletim" => $idBol
+            );
+            
+        }
+        
+        $json_str = "BOLETIMABERTO#" . json_encode(array("dados" => $dados)) . "_";
+
+        return $json_str;
+        
     }
 
 }

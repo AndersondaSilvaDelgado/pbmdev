@@ -6,7 +6,6 @@ require('./dao/InserirDadosDAO.class.php');
 $inserirBolAbertoDAO = new InserirBolAbertoDAO();
 $inserirDadosDAO = new InserirDadosDAO();
 $info = filter_input_array(INPUT_POST, FILTER_DEFAULT);
-$retorno = '';
 
 if (isset($info)):
 
@@ -16,15 +15,15 @@ if (isset($info)):
     $inserirDadosDAO->salvarDados($dados, "inserirbolfechado");
     $pos1 = strpos($dados, "_") + 1;
     $b = substr($dados, 0, ($pos1 - 1));
-    $a = substr($dados, $pos1, (($pos2 - 1) - $pos1));
+    $a = substr($dados, $pos1);
   
     $jsonObjBoletim = json_decode($b);
     $jsonObjAponta = json_decode($a);
     $dadosBoletim = $jsonObjBoletim->boletim;
     $dadosAponta = $jsonObjAponta->aponta;
     
-    $retorno = $inserirBolAbertoDAO->salvarDados($dadosBoletim, $dadosAponta);
+    $inserirBolAbertoDAO->salvarDados($dadosBoletim, $dadosAponta);
 
-    echo $retorno;
+    echo "GRAVOUFECHADO";
 
 endif;
