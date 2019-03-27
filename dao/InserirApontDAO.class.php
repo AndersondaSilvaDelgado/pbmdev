@@ -29,7 +29,7 @@ class InserirApontDAO extends Conn {
                     . " FROM "
                     . " PBM_APONTAMENTO "
                     . " WHERE "
-                    . " DTHR_CEL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
+                    . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
                     . " AND "
                     . " BOLETIM_ID = " . $apont->idExtBolApont . " ";
 
@@ -44,13 +44,25 @@ class InserirApontDAO extends Conn {
 
             if ($v == 0) {
 
+                if ($apont->osApont == 0) {
+                    $apont->osApont = 'NULL';
+                }
+
+                if ($apont->itemOSApont == 0) {
+                    $apont->itemOSApont = 'NULL';
+                }
+
+                if ($apont->paradaApont == 0) {
+                    $apont->paradaApont = 'NULL';
+                }
+
                 if ($apont->dthrFinalApont == "") {
 
                     $sql = "INSERT INTO PBM_APONTAMENTO ("
                             . " BOLETIM_ID "
                             . " , OS_NRO "
-                            . " , ATIVAGR_ID "
-                            . " , MOTPARADA_ID "
+                            . " , ITEM_OS "
+                            . " , MOTPARMEC_ID "
                             . " , DTHR_CEL_INICIAL "
                             . " , DTHR_TRANS_INICIAL "
                             . " , DTHR_CEL_FINAL "
@@ -58,7 +70,7 @@ class InserirApontDAO extends Conn {
                             . " , IND_REALIZ "
                             . " ) "
                             . " VALUES ("
-                            . " " . $idBol
+                            . " " . $apont->idExtBolApont
                             . " , " . $apont->osApont
                             . " , " . $apont->itemOSApont
                             . " , " . $apont->paradaApont
@@ -68,14 +80,13 @@ class InserirApontDAO extends Conn {
                             . " , NULL "
                             . " , " . $apont->realizApont
                             . " )";
-                    
                 } else {
 
                     $sql = "INSERT INTO PBM_APONTAMENTO ("
                             . " BOLETIM_ID "
                             . " , OS_NRO "
-                            . " , ATIVAGR_ID "
-                            . " , MOTPARADA_ID "
+                            . " , ITEM_OS "
+                            . " , MOTPARMEC_ID "
                             . " , DTHR_CEL_INICIAL "
                             . " , DTHR_TRANS_INICIAL "
                             . " , DTHR_CEL_FINAL "
@@ -83,7 +94,7 @@ class InserirApontDAO extends Conn {
                             . " , IND_REALIZ "
                             . " ) "
                             . " VALUES ("
-                            . " " . $idBol
+                            . " " . $apont->idExtBolApont
                             . " , " . $apont->osApont
                             . " , " . $apont->itemOSApont
                             . " , " . $apont->paradaApont
@@ -91,13 +102,12 @@ class InserirApontDAO extends Conn {
                             . " , SYSDATE "
                             . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
                             . " , SYSDATE "
-                            . " , " . $apont->realizAponta
+                            . " , " . $apont->realizApont
                             . " )";
                 }
 
                 $this->Create = $this->Conn->prepare($sql);
                 $this->Create->execute();
-                
             } else {
 
                 if ($apont->dthrFinalApont != "") {
@@ -110,11 +120,10 @@ class InserirApontDAO extends Conn {
                             . " WHERE "
                             . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
                             . " AND "
-                            . " BOLETIM_ID = " . $apont->idExtBolAponta;
+                            . " BOLETIM_ID = " . $apont->idExtBolApont;
 
                     $this->Create = $this->Conn->prepare($sql);
                     $this->Create->execute();
-                    
                 }
             }
         }

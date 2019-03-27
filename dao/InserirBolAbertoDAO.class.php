@@ -49,7 +49,7 @@ class InserirBolAbertoDAO extends Conn {
 
                 $sql = "INSERT INTO PBM_BOLETIM ("
                         . " FUNC_ID "
-                        . " , DTHR_INICIAL_CEL "
+                        . " , DTHR_CEL_INICIAL "
                         . " , DTHR_TRANS_INICIAL "
                         . " , STATUS "
                         . " ) "
@@ -90,7 +90,7 @@ class InserirBolAbertoDAO extends Conn {
                                 . " FROM "
                                 . " PBM_APONTAMENTO "
                                 . " WHERE "
-                                . " DTHR_CEL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
+                                . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
                                 . " AND "
                                 . " BOLETIM_ID = " . $idBol . " ";
 
@@ -105,13 +105,25 @@ class InserirBolAbertoDAO extends Conn {
 
                         if ($v == 0) {
 
+                            if ($apont->osApont == 0) {
+                                $apont->osApont = 'NULL';
+                            }
+
+                            if ($apont->itemOSApont == 0) {
+                                $apont->itemOSApont = 'NULL';
+                            }
+
+                            if ($apont->paradaApont == 0) {
+                                $apont->paradaApont = 'NULL';
+                            }
+
                             if ($apont->dthrFinalApont == "") {
 
                                 $sql = "INSERT INTO PBM_APONTAMENTO ("
                                         . " BOLETIM_ID "
                                         . " , OS_NRO "
-                                        . " , ATIVAGR_ID "
-                                        . " , MOTPARADA_ID "
+                                        . " , ITEM_OS "
+                                        . " , MOTPARMEC_ID "
                                         . " , DTHR_CEL_INICIAL "
                                         . " , DTHR_TRANS_INICIAL "
                                         . " , DTHR_CEL_FINAL "
@@ -134,8 +146,8 @@ class InserirBolAbertoDAO extends Conn {
                                 $sql = "INSERT INTO PBM_APONTAMENTO ("
                                         . " BOLETIM_ID "
                                         . " , OS_NRO "
-                                        . " , ATIVAGR_ID "
-                                        . " , MOTPARADA_ID "
+                                        . " , ITEM_OS "
+                                        . " , MOTPARMEC_ID "
                                         . " , DTHR_CEL_INICIAL "
                                         . " , DTHR_TRANS_INICIAL "
                                         . " , DTHR_CEL_FINAL "
@@ -157,7 +169,6 @@ class InserirBolAbertoDAO extends Conn {
 
                             $this->Create = $this->Conn->prepare($sql);
                             $this->Create->execute();
-                            
                         } else {
 
                             if ($apont->dthrFinalApont != "") {
@@ -207,7 +218,7 @@ class InserirBolAbertoDAO extends Conn {
                                 . " FROM "
                                 . " PBM_APONTAMENTO "
                                 . " WHERE "
-                                . " DTHR_CEL = TO_DATE('" . $apont->dthrApont . "','DD/MM/YYYY HH24:MI') "
+                                . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
                                 . " AND "
                                 . " BOLETIM_ID = " . $idBol . " ";
 
@@ -222,13 +233,25 @@ class InserirBolAbertoDAO extends Conn {
 
                         if ($v == 0) {
 
+                            if ($apont->osApont == 0) {
+                                $apont->osApont = 'NULL';
+                            }
+
+                            if ($apont->itemOSApont == 0) {
+                                $apont->itemOSApont = 'NULL';
+                            }
+
+                            if ($apont->paradaApont == 0) {
+                                $apont->paradaApont = 'NULL';
+                            }
+                            
                             if ($apont->dthrFinalApont == "") {
 
                                 $sql = "INSERT INTO PBM_APONTAMENTO ("
                                         . " BOLETIM_ID "
                                         . " , OS_NRO "
-                                        . " , ATIVAGR_ID "
-                                        . " , MOTPARADA_ID "
+                                        . " , ITEM_OS "
+                                        . " , MOTPARMEC_ID "
                                         . " , DTHR_CEL_INICIAL "
                                         . " , DTHR_TRANS_INICIAL "
                                         . " , DTHR_CEL_FINAL "
@@ -251,8 +274,8 @@ class InserirBolAbertoDAO extends Conn {
                                 $sql = "INSERT INTO PBM_APONTAMENTO ("
                                         . " BOLETIM_ID "
                                         . " , OS_NRO "
-                                        . " , ATIVAGR_ID "
-                                        . " , MOTPARADA_ID "
+                                        . " , ITEM_OS "
+                                        . " , MOTPARMEC_ID "
                                         . " , DTHR_CEL_INICIAL "
                                         . " , DTHR_TRANS_INICIAL "
                                         . " , DTHR_CEL_FINAL "
@@ -301,13 +324,11 @@ class InserirBolAbertoDAO extends Conn {
                 "idBoletim" => $bol->idBoletim,
                 "idExtBoletim" => $idBol
             );
-            
         }
-        
+
         $json_str = "BOLETIMABERTO#" . json_encode(array("dados" => $dados)) . "_";
 
         return $json_str;
-        
     }
 
 }

@@ -1,9 +1,9 @@
 <?php
 
-require('./dao/InserirBolAbertoDAO.class.php');
+require('./dao/InserirBolFechadoDAO.class.php');
 require('./dao/InserirDadosDAO.class.php');
 
-$inserirBolAbertoDAO = new InserirBolAbertoDAO();
+$inserirBolFechadoDAO = new InserirBolFechadoDAO();
 $inserirDadosDAO = new InserirDadosDAO();
 $info = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
@@ -22,7 +22,7 @@ if (isset($info)):
     $dadosBoletim = $jsonObjBoletim->boletim;
     $dadosAponta = $jsonObjAponta->aponta;
     
-    $inserirBolAbertoDAO->salvarDados($dadosBoletim, $dadosAponta);
+    $inserirBolFechadoDAO->salvarDados($dadosBoletim, $dadosAponta);
 
     echo "GRAVOUFECHADO";
 

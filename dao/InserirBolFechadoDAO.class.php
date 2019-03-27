@@ -94,7 +94,7 @@ class InserirBolFechadoDAO extends Conn {
                                 . " FROM "
                                 . " PBM_APONTAMENTO "
                                 . " WHERE "
-                                . " DTHR_CEL = TO_DATE('" . $apont->dthrApont . "','DD/MM/YYYY HH24:MI') "
+                                . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
                                 . " AND "
                                 . " BOLETIM_ID = " . $idBol . " ";
 
@@ -109,11 +109,23 @@ class InserirBolFechadoDAO extends Conn {
 
                         if ($v == 0) {
 
+                            if ($apont->osApont == 0) {
+                                $apont->osApont = 'NULL';
+                            }
+
+                            if ($apont->itemOSApont == 0) {
+                                $apont->itemOSApont = 'NULL';
+                            }
+
+                            if ($apont->paradaApont == 0) {
+                                $apont->paradaApont = 'NULL';
+                            }
+                            
                             $sql = "INSERT INTO PBM_APONTAMENTO ("
                                     . " BOLETIM_ID "
                                     . " , OS_NRO "
-                                    . " , ATIVAGR_ID "
-                                    . " , MOTPARADA_ID "
+                                    . " , ITEM_OS "
+                                    . " , MOTPARMEC_ID "
                                     . " , DTHR_CEL_INICIAL "
                                     . " , DTHR_TRANS_INICIAL "
                                     . " , DTHR_CEL_FINAL "
@@ -195,7 +207,7 @@ class InserirBolFechadoDAO extends Conn {
                                 . " FROM "
                                 . " PBM_APONTAMENTO "
                                 . " WHERE "
-                                . " DTHR_CEL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
+                                . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
                                 . " AND "
                                 . " BOLETIM_ID = " . $idBol . " ";
 
@@ -210,11 +222,23 @@ class InserirBolFechadoDAO extends Conn {
 
                         if ($v == 0) {
 
+                            if ($apont->osApont == 0) {
+                                $apont->osApont = 'NULL';
+                            }
+
+                            if ($apont->itemOSApont == 0) {
+                                $apont->itemOSApont = 'NULL';
+                            }
+
+                            if ($apont->paradaApont == 0) {
+                                $apont->paradaApont = 'NULL';
+                            }
+                            
                             $sql = "INSERT INTO PBM_APONTAMENTO ("
                                     . " BOLETIM_ID "
                                     . " , OS_NRO "
-                                    . " , ATIVAGR_ID "
-                                    . " , MOTPARADA_ID "
+                                    . " , ITEM_OS "
+                                    . " , MOTPARMEC_ID "
                                     . " , DTHR_CEL_INICIAL "
                                     . " , DTHR_TRANS_INICIAL "
                                     . " , DTHR_CEL_FINAL "
