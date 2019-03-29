@@ -108,6 +108,7 @@ class InserirApontDAO extends Conn {
 
                 $this->Create = $this->Conn->prepare($sql);
                 $this->Create->execute();
+                
             } else {
 
                 if ($apont->dthrFinalApont != "") {

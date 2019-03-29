@@ -49,6 +49,7 @@ class InserirBolFechadoDAO extends Conn {
 
                 $sql = "INSERT INTO PBM_BOLETIM ("
                         . " FUNC_ID "
+                        . " , EQUIP_ID "
                         . " , DTHR_CEL_INICIAL "
                         . " , DTHR_TRANS_INICIAL "
                         . " , DTHR_CEL_FINAL "
@@ -57,6 +58,7 @@ class InserirBolFechadoDAO extends Conn {
                         . " ) "
                         . " VALUES ("
                         . " " . $bol->idFuncBoletim
+                        . " , " . $bol->equipBoletim
                         . " , TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                         . " , SYSDATE "
                         . " , TO_DATE('" . $bol->dthrFinalBoletim . "','DD/MM/YYYY HH24:MI') "

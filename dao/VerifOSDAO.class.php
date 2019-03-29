@@ -26,6 +26,7 @@ class VerifOSDAO extends Conn {
                     . " OS_ID AS \"idOS\" "
                     . " , NRO AS \"nroOS\" "
                     . " , NRO_EQUIP AS \"equipOS\" "
+                    . " , DESCR AS \"descrEquipOS\" "
                 . " FROM "
                     . " VMB_OS_AUTO "
                 . " WHERE "
