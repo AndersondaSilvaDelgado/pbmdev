@@ -28,7 +28,7 @@ class AtualizaAplicDAO extends Conn {
             $va = $d->versaoAtual;
         }
 
-        $retorno = 'N';
+        $retorno = 'NAO=2_';
 
         $select = "SELECT "
                 . " COUNT(*) AS QTDE "
@@ -102,7 +102,7 @@ class AtualizaAplicDAO extends Conn {
 
                 if ($va != $vn) {
                     
-                    $retorno = 'S';
+                    $retorno = 'SIM';
                     
                 } else {
 
