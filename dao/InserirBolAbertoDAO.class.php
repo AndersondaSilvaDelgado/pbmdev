@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 require_once 'Conn.class.php';
-
+require_once 'AjusteDataHoraDAO.class.php';
 /**
  * Description of InserirBoletimAberto
  *
@@ -24,6 +24,8 @@ class InserirBolAbertoDAO extends Conn {
     public function salvarDados($dadosBoletim, $dadosAponta) {
 
         $this->Conn = parent::getConn();
+        
+        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
         foreach ($dadosBoletim as $bol) {
 
@@ -50,6 +52,7 @@ class InserirBolAbertoDAO extends Conn {
                 $sql = "INSERT INTO PBM_BOLETIM ("
                         . " FUNC_ID "
                         . " , EQUIP_ID "
+                        . " , DTHR_INICIAL "
                         . " , DTHR_CEL_INICIAL "
                         . " , DTHR_TRANS_INICIAL "
                         . " , STATUS "
@@ -57,6 +60,7 @@ class InserirBolAbertoDAO extends Conn {
                         . " VALUES ("
                         . " " . $bol->idFuncBoletim
                         . " , " . $bol->equipBoletim
+                        . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrInicialBoletim)
                         . " , TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                         . " , SYSDATE "
                         . " , 1 "
@@ -126,8 +130,10 @@ class InserirBolAbertoDAO extends Conn {
                                         . " , OS_NRO "
                                         . " , ITEM_OS "
                                         . " , MOTPARMEC_ID "
+                                        . " , DTHR_INICIAL "
                                         . " , DTHR_CEL_INICIAL "
                                         . " , DTHR_TRANS_INICIAL "
+                                        . " , DTHR_FINAL "
                                         . " , DTHR_CEL_FINAL "
                                         . " , DTHR_TRANS_FINAL "
                                         . " , IND_REALIZ "
@@ -137,8 +143,10 @@ class InserirBolAbertoDAO extends Conn {
                                         . " , " . $apont->osApont
                                         . " , " . $apont->itemOSApont
                                         . " , " . $apont->paradaApont
+                                        . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont)
                                         . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                                         . " , SYSDATE "
+                                        . " , NULL "
                                         . " , NULL "
                                         . " , NULL "
                                         . " , " . $apont->realizApont
@@ -150,8 +158,10 @@ class InserirBolAbertoDAO extends Conn {
                                         . " , OS_NRO "
                                         . " , ITEM_OS "
                                         . " , MOTPARMEC_ID "
+                                        . " , DTHR_INICIAL "
                                         . " , DTHR_CEL_INICIAL "
                                         . " , DTHR_TRANS_INICIAL "
+                                        . " , DTHR_FINAL "
                                         . " , DTHR_CEL_FINAL "
                                         . " , DTHR_TRANS_FINAL "
                                         . " , IND_REALIZ "
@@ -161,8 +171,10 @@ class InserirBolAbertoDAO extends Conn {
                                         . " , " . $apont->osApont
                                         . " , " . $apont->itemOSApont
                                         . " , " . $apont->paradaApont
+                                        . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont)
                                         . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                                         . " , SYSDATE "
+                                        . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont)
                                         . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
                                         . " , SYSDATE "
                                         . " , " . $apont->realizApont
@@ -177,7 +189,8 @@ class InserirBolAbertoDAO extends Conn {
 
                                 $sql = "UPDATE PBM_APONTAMENTO"
                                         . " SET "
-                                        . " DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
+                                        . " DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont)
+                                        . " , DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
                                         . " , DTHR_TRANS_FINAL = SYSDATE "
                                         . " , IND_REALIZ = " . $apont->realizApont
                                         . " WHERE "
@@ -254,8 +267,10 @@ class InserirBolAbertoDAO extends Conn {
                                         . " , OS_NRO "
                                         . " , ITEM_OS "
                                         . " , MOTPARMEC_ID "
+                                        . " , DTHR_INICIAL "
                                         . " , DTHR_CEL_INICIAL "
                                         . " , DTHR_TRANS_INICIAL "
+                                        . " , DTHR_FINAL "
                                         . " , DTHR_CEL_FINAL "
                                         . " , DTHR_TRANS_FINAL "
                                         . " , IND_REALIZ "
@@ -265,8 +280,10 @@ class InserirBolAbertoDAO extends Conn {
                                         . " , " . $apont->osApont
                                         . " , " . $apont->itemOSApont
                                         . " , " . $apont->paradaApont
+                                        . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont)
                                         . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                                         . " , SYSDATE "
+                                        . " , NULL "
                                         . " , NULL "
                                         . " , NULL "
                                         . " , " . $apont->realizApont
@@ -278,8 +295,10 @@ class InserirBolAbertoDAO extends Conn {
                                         . " , OS_NRO "
                                         . " , ITEM_OS "
                                         . " , MOTPARMEC_ID "
+                                        . " , DTHR_INICIAL "
                                         . " , DTHR_CEL_INICIAL "
                                         . " , DTHR_TRANS_INICIAL "
+                                        . " , DTHR_FINAL "
                                         . " , DTHR_CEL_FINAL "
                                         . " , DTHR_TRANS_FINAL "
                                         . " , IND_REALIZ "
@@ -289,8 +308,10 @@ class InserirBolAbertoDAO extends Conn {
                                         . " , " . $apont->osApont
                                         . " , " . $apont->itemOSApont
                                         . " , " . $apont->paradaApont
+                                        . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont)
                                         . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                                         . " , SYSDATE "
+                                        . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont)
                                         . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
                                         . " , SYSDATE "
                                         . " , " . $apont->realizApont
@@ -306,7 +327,8 @@ class InserirBolAbertoDAO extends Conn {
 
                                 $sql = "UPDATE PBM_APONTAMENTO"
                                         . " SET "
-                                        . " DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalAponta . "','DD/MM/YYYY HH24:MI') "
+                                        . " DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont)
+                                        . " , DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalAponta . "','DD/MM/YYYY HH24:MI') "
                                         . " , DTHR_TRANS_FINAL = SYSDATE "
                                         . " , IND_REALIZ = " . $apont->realizAponta
                                         . " WHERE "

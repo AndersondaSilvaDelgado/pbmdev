@@ -31,8 +31,6 @@ class VerifOSDAO extends Conn {
                     . " VMB_OS_AUTO "
                 . " WHERE "
                     . " NRO = " . $valor;
-//                    . " AND DT_PREV_INIC <= SYSDATE " 
-//                    . " AND DT_PREV_TERM >= SYSDATE - 1 " ;
         
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -55,8 +53,6 @@ class VerifOSDAO extends Conn {
                 . " WHERE "
                 . " OS.NRO = " . $valor
                 . " AND I.OS_ID = OS.OS_ID ";
-//                . " AND OS.DT_PREV_INIC <= SYSDATE "
-//                . " AND OS.DT_PREV_TERM >= SYSDATE - 1 ";
         
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);

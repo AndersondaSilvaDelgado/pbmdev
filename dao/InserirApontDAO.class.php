@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 require_once 'Conn.class.php';
-
+require_once 'AjusteDataHoraDAO.class.php';
 /**
  * Description of InsApontamentoMMDAO
  *
@@ -21,6 +21,8 @@ class InserirApontDAO extends Conn {
     public function salvarDados($dadosAponta) {
 
         $this->Conn = parent::getConn();
+        
+        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
         foreach ($dadosAponta as $apont) {
 
@@ -63,8 +65,10 @@ class InserirApontDAO extends Conn {
                             . " , OS_NRO "
                             . " , ITEM_OS "
                             . " , MOTPARMEC_ID "
+                            . " , DTHR_INICIAL "
                             . " , DTHR_CEL_INICIAL "
                             . " , DTHR_TRANS_INICIAL "
+                            . " , DTHR_FINAL "
                             . " , DTHR_CEL_FINAL "
                             . " , DTHR_TRANS_FINAL "
                             . " , IND_REALIZ "
@@ -74,8 +78,10 @@ class InserirApontDAO extends Conn {
                             . " , " . $apont->osApont
                             . " , " . $apont->itemOSApont
                             . " , " . $apont->paradaApont
+                            . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont)
                             . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                             . " , SYSDATE "
+                            . " , NULL "
                             . " , NULL "
                             . " , NULL "
                             . " , " . $apont->realizApont
@@ -87,8 +93,10 @@ class InserirApontDAO extends Conn {
                             . " , OS_NRO "
                             . " , ITEM_OS "
                             . " , MOTPARMEC_ID "
+                            . " , DTHR_INICIAL "
                             . " , DTHR_CEL_INICIAL "
                             . " , DTHR_TRANS_INICIAL "
+                            . " , DTHR_FINAL "
                             . " , DTHR_CEL_FINAL "
                             . " , DTHR_TRANS_FINAL "
                             . " , IND_REALIZ "
@@ -98,8 +106,10 @@ class InserirApontDAO extends Conn {
                             . " , " . $apont->osApont
                             . " , " . $apont->itemOSApont
                             . " , " . $apont->paradaApont
+                            . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont)
                             . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                             . " , SYSDATE "
+                            . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont)
                             . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
                             . " , SYSDATE "
                             . " , " . $apont->realizApont
@@ -115,7 +125,8 @@ class InserirApontDAO extends Conn {
 
                     $sql = "UPDATE PBM_APONTAMENTO"
                             . " SET "
-                            . " DTHR_CEL_FINAL =  TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
+                            . " DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont)
+                            . " , DTHR_CEL_FINAL = TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
                             . " , DTHR_TRANS_FINAL = SYSDATE "
                             . " , IND_REALIZ = " . $apont->realizApont
                             . " WHERE "
