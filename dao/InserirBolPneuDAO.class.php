@@ -13,7 +13,7 @@ require_once 'AjusteDataHoraDAO.class.php';
  *
  * @author anderson
  */
-class InserirBolPneu extends Conn {
+class InserirBolPneuDAO extends Conn {
     //put your code here
 
     /** @var PDO */
@@ -126,10 +126,10 @@ class InserirBolPneu extends Conn {
                                     . " VALUES ("
                                     . " " . $idBolPneu
                                     . " , " . $itemMedPneu->posItemMedPneu
-                                    . " , " . $itemMedPneu->nroPneuItemMedPneu
+                                    . " , '" . $itemMedPneu->nroPneuItemMedPneu . "'"
                                     . " , " . $itemMedPneu->pressaoEncItemMedPneu
                                     . " , " . $itemMedPneu->pressaoColItemMedPneu
-                                    . " , " . $ajusteDataHoraDAO->dataHoraIdBolPneu($idBolPneu, $itemMedPneu->dthrItemMedPneu)
+                                    . " , " . $ajusteDataHoraDAO->dataHoraGMT($itemMedPneu->dthrItemMedPneu)
                                     . " , TO_DATE('" . $itemMedPneu->dthrItemMedPneu . "','DD/MM/YYYY HH24:MI') "
                                     . " , SYSDATE "
                                     . " )";
@@ -139,15 +139,15 @@ class InserirBolPneu extends Conn {
                         }
                     }
                 }
-                
-                foreach ($$dadosItemManutPneu as $itemManutPneu) {
+
+                foreach ($dadosItemManutPneu as $itemManutPneu) {
 
                     if ($bolPneu->idBolPneu == $itemManutPneu->idBolItemManutPneu) {
 
                         $select = " SELECT "
                                 . " COUNT(*) AS QTDE "
                                 . " FROM "
-                                . " PMP_ITEM_MED "
+                                . " PMP_ITEM_MANUT "
                                 . " WHERE "
                                 . " BOLETIM_ID = " . $idBolPneu
                                 . " AND "
@@ -157,7 +157,7 @@ class InserirBolPneu extends Conn {
                                 . " AND "
                                 . " NRO_PNEU_COL LIKE '" . $itemManutPneu->nroPneuColItemManutPneu . "'"
                                 . " AND "
-                                . " DTHR_CEL = TO_DATE('" . $itemPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') ";
+                                . " DTHR_CEL = TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') ";
 
                         $this->Read = $this->Conn->prepare($select);
                         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
@@ -182,8 +182,8 @@ class InserirBolPneu extends Conn {
                                     . " VALUES ("
                                     . " " . $idBolPneu
                                     . " , " . $itemManutPneu->posItemManutPneu
-                                    . " , " . $itemManutPneu->nroPneuRetItemManutPneu
-                                    . " , " . $itemManutPneu->nroPneuColItemManutPneu
+                                    . " , '" . $itemManutPneu->nroPneuRetItemManutPneu . "'"
+                                    . " , '" . $itemManutPneu->nroPneuColItemManutPneu . "'"
                                     . " , " . $ajusteDataHoraDAO->dataHoraGMT($itemManutPneu->dthrItemManutPneu)
                                     . " , TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') "
                                     . " , SYSDATE "
@@ -194,7 +194,6 @@ class InserirBolPneu extends Conn {
                         }
                     }
                 }
-                
             } else {
 
                 $select = " SELECT "
@@ -217,7 +216,7 @@ class InserirBolPneu extends Conn {
                     $idBolPneu = $item8['IDBOLPNEU'];
                 }
 
-foreach ($dadosItemMedPneu as $itemMedPneu) {
+                foreach ($dadosItemMedPneu as $itemMedPneu) {
 
                     if ($bolPneu->idBolPneu == $itemMedPneu->idBolItemMedPneu) {
 
@@ -256,10 +255,10 @@ foreach ($dadosItemMedPneu as $itemMedPneu) {
                                     . " VALUES ("
                                     . " " . $idBolPneu
                                     . " , " . $itemMedPneu->posItemMedPneu
-                                    . " , " . $itemMedPneu->nroPneuItemMedPneu
+                                    . " , '" . $itemMedPneu->nroPneuItemMedPneu . "'"
                                     . " , " . $itemMedPneu->pressaoEncItemMedPneu
                                     . " , " . $itemMedPneu->pressaoColItemMedPneu
-                                    . " , " . $ajusteDataHoraDAO->dataHoraIdBolPneu($idBolPneu, $itemMedPneu->dthrItemMedPneu)
+                                    . " , " . $ajusteDataHoraDAO->dataHoraGMT($itemMedPneu->dthrItemMedPneu)
                                     . " , TO_DATE('" . $itemMedPneu->dthrItemMedPneu . "','DD/MM/YYYY HH24:MI') "
                                     . " , SYSDATE "
                                     . " )";
@@ -269,15 +268,15 @@ foreach ($dadosItemMedPneu as $itemMedPneu) {
                         }
                     }
                 }
-                
-                foreach ($$dadosItemManutPneu as $itemManutPneu) {
+
+                foreach ($dadosItemManutPneu as $itemManutPneu) {
 
                     if ($bolPneu->idBolPneu == $itemManutPneu->idBolItemManutPneu) {
 
                         $select = " SELECT "
                                 . " COUNT(*) AS QTDE "
                                 . " FROM "
-                                . " PMP_ITEM_MED "
+                                . " PMP_ITEM_MANUT "
                                 . " WHERE "
                                 . " BOLETIM_ID = " . $idBolPneu
                                 . " AND "
@@ -287,7 +286,7 @@ foreach ($dadosItemMedPneu as $itemMedPneu) {
                                 . " AND "
                                 . " NRO_PNEU_COL LIKE '" . $itemManutPneu->nroPneuColItemManutPneu . "'"
                                 . " AND "
-                                . " DTHR_CEL = TO_DATE('" . $itemPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') ";
+                                . " DTHR_CEL = TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') ";
 
                         $this->Read = $this->Conn->prepare($select);
                         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
@@ -312,8 +311,8 @@ foreach ($dadosItemMedPneu as $itemMedPneu) {
                                     . " VALUES ("
                                     . " " . $idBolPneu
                                     . " , " . $itemManutPneu->posItemManutPneu
-                                    . " , " . $itemManutPneu->nroPneuRetItemManutPneu
-                                    . " , " . $itemManutPneu->nroPneuColItemManutPneu
+                                    . " , '" . $itemManutPneu->nroPneuRetItemManutPneu . "'"
+                                    . " , '" . $itemManutPneu->nroPneuColItemManutPneu . "'"
                                     . " , " . $ajusteDataHoraDAO->dataHoraGMT($itemManutPneu->dthrItemManutPneu)
                                     . " , TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') "
                                     . " , SYSDATE "

@@ -1,9 +1,9 @@
 <?php
 
-require('./dao/InserirApontFert2DAO.class.php');
+require('./dao/InserirBolPneuDAO.class.php');
 require('./dao/InserirDadosDAO.class.php');
 
-$inserirApontDAO = new InserirApontFert2DAO();
+$inserirBolPneuDAO = new InserirBolPneuDAO();
 $inserirDadosDAO = new InserirDadosDAO();
 $info = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
@@ -25,7 +25,7 @@ if (isset($info)):
     $dadosItemMedPneu = $jsonObjItemMedPneu->itemmedpneu;
     $dadosItemManutPneu = $jsonObjItemManutPneu->itemmanutpneu;
 
-    $inserirApontDAO->salvarDados($dadosBolPneu, $dadosBolPneu, $dadosItemPneu);
+    $inserirBolPneuDAO->salvarDados($dadosBolPneu, $dadosItemMedPneu, $dadosItemManutPneu);
 
     echo 'GRAVOUPNEU';
     
