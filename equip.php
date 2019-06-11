@@ -1,11 +1,7 @@
 <?php
 
-require('./dao/EquipDAO.class.php');
+require('./control/EquipCTR.class.php');
 
-$equipDAO = new EquipDAO();
+$equipCTR = new EquipCTR();
 
-$dados = array("dados"=>$equipDAO->dados());
-
-$json_str = json_encode($dados);
-
-echo $json_str;
+echo $equipCTR->dados();

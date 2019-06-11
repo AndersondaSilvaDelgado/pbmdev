@@ -5,14 +5,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once 'Conn.class.php';
+require_once('./dbutil/Conn.class.php');
 
 /**
- * Description of ServicoDAO
+ * Description of ItemOSDAO
  *
  * @author anderson
  */
-class ServicoDAO extends Conn {
+class ItemOSDAO extends Conn {
+    //put your code here
 
     /** @var PDOStatement */
     private $Read;
@@ -20,17 +21,20 @@ class ServicoDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados() {
+    public function dados($os) {
 
         $select = " SELECT "
-                . " SERVICO_ID AS \"idServico\" "
-                . " , CD AS \"codServico\" "
-                . " , DESCR AS \"descrServico\" "
+                . " I.ITOSMECAN_ID AS \"idItemOS\" "
+                . " , I.OS_ID AS \"idOS\" "
+                . " , I.ITEM_OS AS \"seqItemOS\" "
+                . " , I.SERVICO_ID AS \"idServItemOS\" "
+                . " , I.COMPONENTE_ID AS \"idCompItemOS\" "
                 . " FROM "
-                . " VMB_SERVICO_AUTO "
-                . " ORDER BY "
-                . " CD "
-                . " ASC ";
+                . " USINAS.VMB_OS_AUTO OS "
+                . " , USINAS.VMB_ITEM_OS_AUTO I "
+                . " WHERE "
+                . " OS.NRO = " . $os
+                . " AND I.OS_ID = OS.OS_ID ";
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);

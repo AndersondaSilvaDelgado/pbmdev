@@ -1,11 +1,7 @@
 <?php
 
-require('./dao/ColabDAO.class.php');
+require('./control/ColabCTR.class.php');
 
-$colabDAO = new ColabDAO();
+$colabCTR = new ColabCTR();
 
-$dados = array("dados"=>$colabDAO->dados());
-
-$json_str = json_encode($dados);
-
-echo $json_str;
+echo $colabCTR->dados();

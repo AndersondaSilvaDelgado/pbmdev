@@ -5,44 +5,40 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once 'Conn.class.php';
+require_once('./dbutil/Conn.class.php');
 /**
- * Description of VerifPneuDAO
+ * Description of ParadaDAO
  *
  * @author anderson
  */
-class VerifPneuDAO extends Conn {
-    //put your code here
-    
+class ParadaDAO extends Conn {
+
     /** @var PDOStatement */
     private $Read;
 
     /** @var PDO */
     private $Conn;
 
-    public function dados($valor) {
+    public function dados() {
 
-        $this->Conn = parent::getConn();
-        
         $select = " SELECT "
-                . " EQUIPCOMPO_ID AS \"idPneu\" "
-                . " , CD AS \"codPneu\" "
+                . " MOTPARMEC_ID AS \"idParada\" "
+                . " , CD AS \"codParada\" "
+                . " , CARACTER(DESCR) AS \"descrParada\" "
                 . " FROM "
-                . " VMB_PNEU "
-                . " WHERE "
-                . " CD LIKE '" . $valor . "'";
+                . " VMB_PARADA_AUTO "
+                . " ORDER BY "
+                . " CD "
+                . " ASC ";
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();
-        $r1 = $this->Read->fetchAll();
+        $result = $this->Read->fetchAll();
 
-        $dados = array("dados"=>$r1);
-        $res1 = json_encode($dados);
-        
-        return $res1;
+        return $result;
         
     }
-    
+
 }

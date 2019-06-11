@@ -1,11 +1,7 @@
 <?php
 
-require('./dao/ComponenteDAO.class.php');
+require('./control/ComponenteCTR.class.php');
 
-$componenteDAO = new ComponenteDAO();
+$componenteCTR = new ComponenteCTR();
 
-$dados = array("dados"=>$componenteDAO->dados());
-
-$json_str = json_encode($dados);
-
-echo $json_str;
+echo $componenteCTR->dados();

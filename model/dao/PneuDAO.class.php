@@ -5,13 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once 'Conn.class.php';
+require_once('./dbutil/Conn.class.php');
 /**
- * Description of EquipDAO
+ * Description of PneuDAO
  *
  * @author anderson
  */
-class EquipDAO extends Conn  {
+class PneuDAO extends Conn {
     //put your code here
     
     /** @var PDOStatement */
@@ -20,15 +20,15 @@ class EquipDAO extends Conn  {
     /** @var PDO */
     private $Conn;
 
-    public function dados() {
+    public function dados($pneu) {
 
-        $select = " SELECT " 
-                . " EQUIP_ID AS \"idEquip\" "
-                . " , NRO_EQUIP AS \"numEquip\" "
+        $select = " SELECT "
+                . " EQUIPCOMPO_ID AS \"idPneu\" "
+                . " , CD AS \"codPneu\" "
                 . " FROM "
-                . " USINAS.EQUIP "
-                . " WHERE " 
-                . " DT_DESAT IS NULL ";
+                . " VMB_PNEU "
+                . " WHERE "
+                . " CD LIKE '" . $pneu . "'";
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);

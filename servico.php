@@ -1,11 +1,7 @@
 <?php
 
-require('./dao/ServicoDAO.class.php');
+require('./control/ServicoCTR.class.php');
 
-$servicoDAO = new ServicoDAO();
+$servicoCTR = new ServicoCTR();
 
-$dados = array("dados"=>$servicoDAO->dados());
-
-$json_str = json_encode($dados);
-
-echo $json_str;
+echo $servicoCTR->dados();

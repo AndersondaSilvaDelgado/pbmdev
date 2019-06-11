@@ -1,11 +1,7 @@
 <?php
 
-require('./dao/EscalaTrabDAO.class.php');
+require('./control/EscalaTrabCTR.class.php');
 
-$escalaTrabDAO = new EscalaTrabDAO();
+$escalaTrabCTR = new EscalaTrabCTR();
 
-$dados = array("dados"=>$escalaTrabDAO->dados());
-
-$json_str = json_encode($dados);
-
-echo $json_str;
+echo $escalaTrabCTR->dados();

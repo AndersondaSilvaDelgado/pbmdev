@@ -1,11 +1,7 @@
 <?php
 
-require('./dao/REquipPneuDAO.class.php');
+require('./control/REquipPneuCTR.class.php');
 
-$rEquipPneuDAO = new REquipPneuDAO();
+$rEquipPneuCTR = new REquipPneuCTR();
 
-$dados = array("dados"=>$rEquipPneuDAO->dados());
-
-$json_str = json_encode($dados);
-
-echo $json_str;
+echo $rEquipPneuCTR->dados();

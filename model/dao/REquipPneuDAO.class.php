@@ -5,13 +5,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once 'Conn.class.php';
+require_once('./dbutil/Conn.class.php');
 /**
- * Description of EscalaTrabDAO
+ * Description of REquipPneu
  *
  * @author anderson
  */
-class EscalaTrabDAO extends Conn {
+class REquipPneuDAO extends Conn {
     //put your code here
     
     /** @var PDOStatement */
@@ -22,16 +22,13 @@ class EscalaTrabDAO extends Conn {
 
     public function dados() {
 
-        $select = " SELECT DISTINCT "
-                    . " E.ESCALATRAB_ID AS \"idEscalaTrab\" "
-                    . " , LPAD(E.HR_ENT1, 5, '0') AS \"horarioEntEscalaTrab\" "
-                    . " , LPAD(E.HR_SAI2, 5, '0') AS \"horarioSaiEscalaTrab\" "
+        $select = " SELECT "
+                . " VEP.EQUIP_ID AS \"idEquip\" "
+                . " , VEP.POSPNCONF_ID AS \"idPosConfPneu\" "
+                . " , VEP.POS_PNEU AS \"posPneu\" "
                 . " FROM "
-                    . "  USINAS.VMB_ESCALA_TRAB E"
-                . " ORDER BY "
-                    . " E.ESCALATRAB_ID "
-                . " ASC ";
-        
+                . " VMB_EQUIP_PNEU VEP ";
+
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);

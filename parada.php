@@ -1,11 +1,7 @@
 <?php
 
-require('./dao/ParadaDAO.class.php');
+require('./control/ParadaCTR.class.php');
 
-$paradaDAO = new ParadaDAO();
+$paradaCTR = new ParadaCTR();
 
-$dados = array("dados"=>$paradaDAO->dados());
-
-$json_str = json_encode($dados);
-
-echo $json_str;
+echo $paradaCTR->dados();
