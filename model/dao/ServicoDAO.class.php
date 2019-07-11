@@ -19,7 +19,7 @@ class ServicoDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($valor) {
+    public function dados() {
 
         $select = " SELECT "
                 . " SERVICO_ID AS \"idServico\" "

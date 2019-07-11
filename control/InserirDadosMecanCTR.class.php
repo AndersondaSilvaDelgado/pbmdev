@@ -46,7 +46,7 @@ class InserirDadosMecanCTR {
             $idBol = $boletimMecanDAO->idBoletimMecan($bol);
             $this->salvarApont($idBol, $bol->idBoletim, $dadosAponta);
         }
-        return 'GRAVOU-BOLFECHADO';
+        return 'GRAVOUFECHADO';
     }
 
     public function salvarDadosBolAbertoMecan($info, $pagina) {
@@ -74,8 +74,15 @@ class InserirDadosMecanCTR {
             }
             $idBol = $boletimMecanDAO->idBoletimMecan($bol);
             $this->salvarApont($idBol, $bol->idBoletim, $dadosAponta);
+            
+            $d[] = array(
+                "idBoletim" => $bol->idBoletim,
+                "idExtBoletim" => $idBol
+            );
         }
-        return "GRAVOU+id=" . $idBol . "_";
+
+        $retorno = "GRAVOUABERTO#" . json_encode(array("dados" => $d)) . "_";
+        return $retorno;
     }
 
     public function salvarDadosApontMecan($info, $pagina) {
@@ -90,24 +97,34 @@ class InserirDadosMecanCTR {
         $dadosAponta = $jsonObjAponta->aponta;
 
         foreach ($dadosAponta as $apont) {
-            $v = $apontMecanDAO->verifApontMecan($apont->idExtBolAponta, $apont);
+            $v = $apontMecanDAO->verifApontMecan($apont->idExtBolApont, $apont);
             if ($v == 0) {
-                $apontMecanDAO->insApontMecan($apont->idExtBolAponta, $apont);
+                if ($apont->dthrFinalApont == "") {
+                    $apontMecanDAO->insApontMecanAberto($apont->idExtBolApont, $apont);
+                } else {
+                    $apontMecanDAO->insApontMecanFechado($apont->idExtBolApont, $apont);
+                }
+            } else {
+                $apontMecanDAO->updateApontMecan($apont->idExtBolApont, $apont);
             }
-            $idApont = $apontMecanDAO->idApontMecan($apont->idExtBolAponta, $apont);
         }
-        return 'GRAVOU-APONTAMM';
+        echo 'GRAVOUAPONTA';
     }
 
     private function salvarApont($idBolBD, $idBolCel, $dadosAponta) {
-        $apontMMDAO = new ApontMMDAO();
+        $apontMecanDAO = new ApontMecanDAO();
         foreach ($dadosAponta as $apont) {
-            if ($idBolCel == $apont->idBolAponta) {
-                $v = $apontMMDAO->verifApontMM($idBolBD, $apont);
+            if ($idBolCel == $apont->idBolApont) {
+                $v = $apontMecanDAO->verifApontMecan($idBolBD, $apont);
                 if ($v == 0) {
-                    $apontMMDAO->insApontMM($idBolBD, $apont);
+                    if ($apont->dthrFinalApont == "") {
+                        $apontMecanDAO->insApontMecanAberto($idBolBD, $apont);
+                    } else {
+                        $apontMecanDAO->insApontMecanFechado($idBolBD, $apont);
+                    }
+                } else {
+                    $apontMecanDAO->updateApontMecan($idBolBD, $apont);
                 }
-                $idApont = $apontMMDAO->idApontMM($idBolBD, $apont);
             }
         }
     }
