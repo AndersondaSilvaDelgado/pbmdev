@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once ('./dbutil/Conn.class.php');
+require_once ('../dbutil/Conn.class.php');
 /**
  * Description of AtualizaAplicDAO
  *
@@ -100,9 +100,7 @@ class AtualAplicDAO extends Conn {
             } else {
 
                 if ($va != $vn) {
-                    
                     $retorno = 'SIM';
-                    
                 } else {
 
                     if (strcmp($va, $vab) <> 0) {

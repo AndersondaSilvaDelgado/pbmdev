@@ -5,17 +5,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once './dbutil/Conn.class.php';
-require_once 'AjusteDataHoraDAO.class.php';
-
+require_once ('../dbutil/Conn.class.php');
+require_once ('../model/dao/AjusteDataHoraDAO.class.php');
 /**
  * Description of ItemMedPneu
  *
  * @author anderson
  */
-class ItemMedPneuDAO extends Conn {
+class ItemCalibPneuDAO extends Conn {
 
-    public function verifItemMedPneu($idBolPneu, $itemMedPneu) {
+    public function verifItemCalibPneu($idBolPneu, $itemCalibPneu) {
 
         $select = " SELECT "
                 . " COUNT(*) AS QTDE "
@@ -24,9 +23,9 @@ class ItemMedPneuDAO extends Conn {
                 . " WHERE "
                 . " BOLETIM_ID = " . $idBolPneu
                 . " AND "
-                . " NRO_PNEU LIKE '" . $itemMedPneu->nroPneuItemMedPneu . "'"
+                . " NRO_PNEU LIKE '" . $itemCalibPneu->nroPneuItemCalibPneu . "'"
                 . " AND "
-                . " DTHR_CEL = TO_DATE('" . $itemMedPneu->dthrItemMedPneu . "','DD/MM/YYYY HH24:MI') ";
+                . " DTHR_CEL = TO_DATE('" . $itemCalibPneu->dthrItemCalibPneu . "','DD/MM/YYYY HH24:MI') ";
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -41,7 +40,7 @@ class ItemMedPneuDAO extends Conn {
         return $v;
     }
 
-    public function insItemMedPneu($idBolPneu, $itemMedPneu) {
+    public function insItemCalibPneu($idBolPneu, $itemCalibPneu) {
 
         $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
@@ -57,12 +56,12 @@ class ItemMedPneuDAO extends Conn {
                 . " ) "
                 . " VALUES ("
                 . " " . $idBolPneu
-                . " , " . $itemMedPneu->posItemMedPneu
-                . " , '" . $itemMedPneu->nroPneuItemMedPneu . "'"
-                . " , " . $itemMedPneu->pressaoEncItemMedPneu
-                . " , " . $itemMedPneu->pressaoColItemMedPneu
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($itemMedPneu->dthrItemMedPneu)
-                . " , TO_DATE('" . $itemMedPneu->dthrItemMedPneu . "','DD/MM/YYYY HH24:MI') "
+                . " , " . $itemCalibPneu->posItemCalibPneu
+                . " , '" . $itemCalibPneu->nroPneuItemCalibPneu . "'"
+                . " , " . $itemCalibPneu->pressaoEncItemCalibPneu
+                . " , " . $itemCalibPneu->pressaoColItemCalibPneu
+                . " , " . $ajusteDataHoraDAO->dataHoraGMT($itemCalibPneu->dthrItemCalibPneu)
+                . " , TO_DATE('" . $itemCalibPneu->dthrItemCalibPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " )";
 

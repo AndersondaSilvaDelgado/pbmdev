@@ -14,7 +14,7 @@ require_once('./model/dao/ApontMecanDAO.class.php');
  *
  * @author anderson
  */
-class InserirDadosMecanCTR {
+class MecanicoCTR {
 
     //put your code here
 
