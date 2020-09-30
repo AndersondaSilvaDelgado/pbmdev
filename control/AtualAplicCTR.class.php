@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require('./model/dao/AtualAplicDAO.class.php');
+require('../model/dao/AtualAplicDAO.class.php');
 /**
  * Description of AtualAplicativoCTR
  *
@@ -14,14 +14,55 @@ require('./model/dao/AtualAplicDAO.class.php');
 class AtualAplicCTR {
     //put your code here
     
-    public function verAtualAplic($info) {
+    private $base = 2;
+    
+    public function atualAplic($versao, $info) {
 
-        $atualAplicDAO = new AtualAplicDAO();
+        $versao = str_replace("_", ".", $versao);
+        
+        if($versao >= 1.00){
+        
+            $atualAplicDAO = new AtualAplicDAO();
 
-        $jsonObj = json_decode($info['dado']);
-        $dados = $jsonObj->dados;
-        $dadosAtualAplic = $atualAplicDAO->verAtualAplic($dados);
-        return $dadosAtualAplic;
+            $jsonObj = json_decode($info['dado']);
+            $dados = $jsonObj->dados;
+
+            foreach ($dados as $d) {
+                $equip = $d->idEquipAtual;
+                $va = $d->versaoAtual;
+            }
+        
+            $retorno = 'NAO=2_';
+            
+            $v = $atualAplicDAO->verAtual($equip, $this->base);
+            if ($v == 0) {
+                $atualAplicDAO->insAtual($equip, $va, $this->base);
+            } else {
+                $result = $atualAplicDAO->retAtual($equip, $this->base);
+                foreach ($result as $item) {
+                    $vn = $item['VERSAO_NOVA'];
+                    $vab = $item['VERSAO_ATUAL'];
+                }
+                if ($va != $vab) {
+                    $atualAplicDAO->updAtualNova($equip, $va, $this->base);
+                } else {
+                    if ($va != $vn) {
+                        $retorno = 'SIM';
+                    } else {
+                        if (strcmp($va, $vab) <> 0) {
+                            $atualAplicDAO->updAtual($equip, $va, $this->base);
+                        }
+                    }
+                }
+            }
+            $dthr = $atualAplicDAO->dataHora($this->base);
+            if ($retorno == 'SIM') {
+                return $retorno;
+            } else {
+                return $retorno . "#" . $dthr;
+            }
+        
+        }
         
     }
     

@@ -20,7 +20,7 @@ class OSDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($os) {
+    public function dados($os, $base) {
 
         $select = " SELECT "
                     . " OS_ID AS \"idOS\" "
@@ -32,7 +32,7 @@ class OSDAO extends Conn {
                 . " WHERE "
                     . " NRO = " . $os;
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

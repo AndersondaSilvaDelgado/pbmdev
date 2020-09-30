@@ -30,9 +30,9 @@ class BaseDadosCTR {
        
         if($versao >= 2.00){
             
-            $componenteDAO = new ComponenteDAO();
+            $colabDAO = new ColabDAO();
         
-            $dados = array("dados"=>$componenteDAO->dados($this->base));
+            $dados = array("dados"=>$colabDAO->dados($this->base));
             $json_str = json_encode($dados);
 
             return $json_str;
@@ -159,7 +159,7 @@ class BaseDadosCTR {
         
             $rEquipPneuDAO = new REquipPneuDAO();
 
-            $dados = array("dados"=>$rEquipPneuDAO->dados());
+            $dados = array("dados"=>$rEquipPneuDAO->dados($this->base));
             $json_str = json_encode($dados);
 
             return $json_str;
@@ -176,7 +176,7 @@ class BaseDadosCTR {
         
             $servicoDAO = new ServicoDAO();
 
-            $dados = array("dados"=>$servicoDAO->dados());
+            $dados = array("dados"=>$servicoDAO->dados($this->base));
             $json_str = json_encode($dados);
 
             return $json_str;

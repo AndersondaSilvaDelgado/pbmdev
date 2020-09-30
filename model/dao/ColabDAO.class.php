@@ -19,7 +19,7 @@ class ColabDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados() {
+    public function dados($base) {
 
         $select = " SELECT "
                     . " F.FUNC_ID AS \"idColab\" "
@@ -35,7 +35,7 @@ class ColabDAO extends Conn {
                     . " F.CD "
                 . " ASC ";
         
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

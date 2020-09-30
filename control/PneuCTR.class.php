@@ -5,10 +5,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('./model/dao/InserirLogDAO.class.php');
-require_once('./model/dao/BoletimPneuDAO.class.php');
-require_once('./model/dao/ItemMedPneuDAO.class.php');
-require_once('./model/dao/ItemManutPneuDAO.class.php');
+require_once('../model/dao/LogDAO.class.php');
+require_once('../model/dao/BoletimPneuDAO.class.php');
+require_once('../model/dao/ItemMedPneuDAO.class.php');
+require_once('../model/dao/ItemManutPneuDAO.class.php');
 
 /**
  * Description of InserirDadosPneu
@@ -76,8 +76,8 @@ class InserirDadosPneuCTR {
     }
 
     private function salvarLog($dados, $pagina) {
-        $inserirLogDAO = new InserirLogDAO();
-        $inserirLogDAO->salvarDados($dados, $pagina);
+        $logDAO = new LogDAO();
+        $logDAO->salvarDados($dados, $pagina);
     }
 
 }

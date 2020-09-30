@@ -5,9 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('./model/dao/InserirLogDAO.class.php');
-require_once('./model/dao/BoletimMecanDAO.class.php');
-require_once('./model/dao/ApontMecanDAO.class.php');
+require_once('../model/dao/LogDAO.class.php');
+require_once('../model/dao/BoletimMecanDAO.class.php');
+require_once('../model/dao/ApontMecanDAO.class.php');
 
 /**
  * Description of InserirDadosMecan
@@ -130,8 +130,8 @@ class MecanicoCTR {
     }
 
     private function salvarLog($dados, $pagina) {
-        $inserirLogDAO = new InserirLogDAO();
-        $inserirLogDAO->salvarDados($dados, $pagina);
+        $logDAO = new LogDAO();
+        $logDAO->salvarDados($dados, $pagina);
     }
 
 }
