@@ -16,7 +16,7 @@ class ApontMecanDAO extends Conn {
 
     //put your code here
 
-    public function verifApontMecan($idBol, $apont) {
+    public function verifApont($idBol, $apont, $base) {
 
         $select = " SELECT "
                 . " COUNT(*) AS QTDE "
@@ -27,7 +27,7 @@ class ApontMecanDAO extends Conn {
                 . " AND "
                 . " BOLETIM_ID = " . $idBol;
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();
@@ -40,7 +40,7 @@ class ApontMecanDAO extends Conn {
         return $v;
     }
 
-    public function insApontMecanAberto($idBol, $apont) {
+    public function insApontAberto($idBol, $apont, $base) {
 
         $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
@@ -74,7 +74,7 @@ class ApontMecanDAO extends Conn {
                 . " , " . $apont->osApont
                 . " , " . $apont->itemOSApont
                 . " , " . $apont->paradaApont
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont)
+                . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont, $base)
                 . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
                 . " , SYSDATE "
                 . " , NULL "
@@ -83,12 +83,12 @@ class ApontMecanDAO extends Conn {
                 . " , " . $apont->realizApont
                 . " )";
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }
 
-    public function insApontMecanFechado($idBol, $apont) {
+    public function insApontFechado($idBol, $apont, $base) {
 
         $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
@@ -131,18 +131,18 @@ class ApontMecanDAO extends Conn {
                 . " , " . $apont->realizApont
                 . " )";
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }
 
-    public function updateApontMecan($idBol, $apont) {
+    public function updApont($idBol, $apont, $base) {
 
         $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
         $sql = "UPDATE PBM_APONTAMENTO"
                 . " SET "
-                . " DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont)
+                . " DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont, $base)
                 . " , DTHR_CEL_FINAL = TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
                 . " , DTHR_TRANS_FINAL = SYSDATE "
                 . " , IND_REALIZ = " . $apont->realizApont
@@ -151,7 +151,7 @@ class ApontMecanDAO extends Conn {
                 . " AND "
                 . " BOLETIM_ID = " . $idBol;
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }

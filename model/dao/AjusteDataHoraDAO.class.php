@@ -19,10 +19,8 @@ class AjusteDataHoraDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dataHoraGMT($dataHora) {
+    public function dataHoraGMT($dataHora, $base) {
 
-        $this->Conn = parent::getConn();
-        
         $select = " SELECT "
                 . " COUNT(ID) AS VERDATA "
                 . " FROM "
@@ -30,6 +28,7 @@ class AjusteDataHoraDAO extends Conn {
                 . " WHERE "
                 . " TO_DATE('" . $dataHora . "','DD/MM/YYYY HH24:MI') BETWEEN  DATA_INICIAL AND DATA_FINAL";
 
+        $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

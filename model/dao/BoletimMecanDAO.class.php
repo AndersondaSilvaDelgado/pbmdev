@@ -17,7 +17,7 @@ class BoletimMecanDAO extends Conn {
 
     //put your code here
 
-    public function verifBoletimMecan($bol) {
+    public function verifBol($bol, $base) {
 
         $select = " SELECT "
                 . " COUNT(*) AS QTDE "
@@ -28,7 +28,7 @@ class BoletimMecanDAO extends Conn {
                 . " AND "
                 . " FUNC_ID = " . $bol->idFuncBoletim . " ";
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();
@@ -41,7 +41,7 @@ class BoletimMecanDAO extends Conn {
         return $v;
     }
 
-    public function idBoletimMecan($bol) {
+    public function idBol($bol, $base) {
 
         $select = " SELECT "
                 . " ID AS ID "
@@ -52,7 +52,7 @@ class BoletimMecanDAO extends Conn {
                 . " AND "
                 . " FUNC_ID = " . $bol->idFuncBoletim;
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();
@@ -65,7 +65,7 @@ class BoletimMecanDAO extends Conn {
         return $id;
     }
 
-    public function insBoletimMecanAberto($bol) {
+    public function insBolAberto($bol, $base) {
 
         $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
@@ -80,18 +80,18 @@ class BoletimMecanDAO extends Conn {
                 . " VALUES ("
                 . " " . $bol->idFuncBoletim
                 . " , " . $bol->equipBoletim
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrInicialBoletim)
+                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrInicialBoletim, $base)
                 . " , TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " , 1 "
                 . " )";
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }
 
-    public function insBoletimMecanFechado($bol) {
+    public function insBolFechado($bol, $base) {
 
         $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
@@ -109,34 +109,34 @@ class BoletimMecanDAO extends Conn {
                 . " VALUES ("
                 . " " . $bol->idFuncBoletim
                 . " , " . $bol->equipBoletim
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrInicialBoletim)
+                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrInicialBoletim, $base)
                 . " , TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrFinalBoletim)
+                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrFinalBoletim, $base)
                 . " , TO_DATE('" . $bol->dthrFinalBoletim . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " , 2 "
                 . " )";
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }
 
-    public function updateBoletimMecanFechado($bol) {
+    public function updBolFechado($bol, $base) {
 
         $ajusteDataHoraDAO = new AjusteDataHoraDAO();
 
         $sql = "UPDATE PBM_BOLETIM "
                 . " SET "
                 . " STATUS = " . $bol->statusBoletim
-                . " , DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrFinalBoletim)
+                . " , DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrFinalBoletim, $base)
                 . " , DTHR_CEL_FINAL = TO_DATE('" . $bol->dthrFinalBoletim . "','DD/MM/YYYY HH24:MI')"
                 . " , DTHR_TRANS_FINAL = SYSDATE "
                 . " WHERE "
                 . " ID = " . $bol->idExtBoletim;
 
-        $this->Conn = parent::getConn();
+        $this->Conn = parent::getConn($base);
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
         

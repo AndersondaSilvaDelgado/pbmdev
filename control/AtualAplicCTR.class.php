@@ -20,7 +20,7 @@ class AtualAplicCTR {
 
         $versao = str_replace("_", ".", $versao);
         
-        if($versao >= 1.00){
+        if($versao >= 2.00){
         
             $atualAplicDAO = new AtualAplicDAO();
 
@@ -55,12 +55,13 @@ class AtualAplicCTR {
                     }
                 }
             }
-            $dthr = $atualAplicDAO->dataHora($this->base);
-            if ($retorno == 'SIM') {
-                return $retorno;
-            } else {
-                return $retorno . "#" . $dthr;
-            }
+            return $retorno;
+//            $dthr = $atualAplicDAO->dataHora($this->base);
+//            if ($retorno == 'SIM') {
+//                return $retorno;
+//            } else {
+//                return $retorno . "#" . $dthr;
+//            }
         
         }
         
