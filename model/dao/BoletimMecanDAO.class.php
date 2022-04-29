@@ -17,18 +17,18 @@ class BoletimMecanDAO extends Conn {
 
     //put your code here
 
-    public function verifBol($bol, $base) {
+    public function verifBolMecan($bol) {
 
         $select = " SELECT "
                 . " COUNT(*) AS QTDE "
                 . " FROM "
                 . " PBM_BOLETIM "
                 . " WHERE "
-                . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
+                . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " AND "
-                . " FUNC_ID = " . $bol->idFuncBoletim . " ";
+                . " FUNC_ID = " . $bol->idFuncBolMecan . " ";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();
@@ -41,18 +41,18 @@ class BoletimMecanDAO extends Conn {
         return $v;
     }
 
-    public function idBol($bol, $base) {
+    public function idBolMecan($bol) {
 
         $select = " SELECT "
                 . " ID AS ID "
                 . " FROM "
                 . " PBM_BOLETIM "
                 . " WHERE "
-                . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
+                . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " AND "
-                . " FUNC_ID = " . $bol->idFuncBoletim;
+                . " FUNC_ID = " . $bol->idFuncBolMecan;
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();
@@ -65,9 +65,7 @@ class BoletimMecanDAO extends Conn {
         return $id;
     }
 
-    public function insBolAberto($bol, $base) {
-
-        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
+    public function insBolMecanAberto($bol) {
 
         $sql = "INSERT INTO PBM_BOLETIM ("
                 . " FUNC_ID "
@@ -78,22 +76,20 @@ class BoletimMecanDAO extends Conn {
                 . " , STATUS "
                 . " ) "
                 . " VALUES ("
-                . " " . $bol->idFuncBoletim
-                . " , " . $bol->equipBoletim
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrInicialBoletim, $base)
-                . " , TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
+                . " " . $bol->idFuncBolMecan
+                . " , " . $bol->idEquipBolMecan
+                . " , TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
+                . " , TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " , 1 "
                 . " )";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }
 
-    public function insBolFechado($bol, $base) {
-
-        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
+    public function insBolMecanFechado($bol) {
 
         $sql = "INSERT INTO PBM_BOLETIM ("
                 . " FUNC_ID "
@@ -105,38 +101,39 @@ class BoletimMecanDAO extends Conn {
                 . " , DTHR_CEL_FINAL "
                 . " , DTHR_TRANS_FINAL "
                 . " , STATUS "
+                . " , STATUS_FECH "
                 . " ) "
                 . " VALUES ("
-                . " " . $bol->idFuncBoletim
-                . " , " . $bol->equipBoletim
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrInicialBoletim, $base)
-                . " , TO_DATE('" . $bol->dthrInicialBoletim . "','DD/MM/YYYY HH24:MI') "
+                . " " . $bol->idFuncBolMecan
+                . " , " . $bol->equipBolMecan
+                . " , TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
+                . " , TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrFinalBoletim, $base)
-                . " , TO_DATE('" . $bol->dthrFinalBoletim . "','DD/MM/YYYY HH24:MI') "
+                . " , TO_DATE('" . $bol->dthrFinalBolMecan . "','DD/MM/YYYY HH24:MI') "
+                . " , TO_DATE('" . $bol->dthrFinalBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " , 2 "
+                . " , " . $bol->statusFechBoletim
                 . " )";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }
 
-    public function updBolFechado($bol, $base) {
-
-        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
+    public function updBolMecanFechado($bol) {
 
         $sql = "UPDATE PBM_BOLETIM "
                 . " SET "
-                . " STATUS = " . $bol->statusBoletim
-                . " , DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($bol->dthrFinalBoletim, $base)
-                . " , DTHR_CEL_FINAL = TO_DATE('" . $bol->dthrFinalBoletim . "','DD/MM/YYYY HH24:MI')"
+                . " STATUS = " . $bol->statusBolMecan
+                . " , DTHR_FINAL = TO_DATE('" . $bol->dthrFinalBolMecan . "','DD/MM/YYYY HH24:MI')"
+                . " , DTHR_CEL_FINAL = TO_DATE('" . $bol->dthrFinalBolMecan . "','DD/MM/YYYY HH24:MI')"
                 . " , DTHR_TRANS_FINAL = SYSDATE "
+                . " , STATUS_FECH = " . $bol->statusFechBolMecan
                 . " WHERE "
                 . " ID = " . $bol->idExtBoletim;
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
         

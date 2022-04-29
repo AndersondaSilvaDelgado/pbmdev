@@ -12,59 +12,46 @@ require('../model/dao/AtualAplicDAO.class.php');
  * @author anderson
  */
 class AtualAplicCTR {
-    //put your code here
     
-    private $base = 2;
-    
-    public function atualAplic($versao, $info) {
+    public function atualAplic($info) {
 
-        $versao = str_replace("_", ".", $versao);
-        
-        if($versao >= 2.00){
-        
-            $atualAplicDAO = new AtualAplicDAO();
+        $atualAplicDAO = new AtualAplicDAO();
 
-            $jsonObj = json_decode($info['dado']);
-            $dados = $jsonObj->dados;
+        $jsonObj = json_decode($info['dado']);
+        $dados = $jsonObj->dados;
 
-            foreach ($dados as $d) {
-                $equip = $d->idEquipAtual;
-                $va = $d->versaoAtual;
+        foreach ($dados as $d) {
+            $equip = $d->idEquipAtual;
+            $va = $d->versaoAtual;
+        }
+
+        $retAtualApp = 0;
+
+        $v = $atualAplicDAO->verAtual($equip);
+        if ($v == 0) {
+            $atualAplicDAO->insAtual($equip, $va);
+        } else {
+            $result = $atualAplicDAO->retAtual($equip);
+            foreach ($result as $item) {
+                $vn = $item['VERSAO_NOVA'];
+                $vab = $item['VERSAO_ATUAL'];
             }
-        
-            $retorno = 'NAO=2_';
-            
-            $v = $atualAplicDAO->verAtual($equip, $this->base);
-            if ($v == 0) {
-                $atualAplicDAO->insAtual($equip, $va, $this->base);
+            if ($va != $vab) {
+                $atualAplicDAO->updAtualNova($equip, $va);
             } else {
-                $result = $atualAplicDAO->retAtual($equip, $this->base);
-                foreach ($result as $item) {
-                    $vn = $item['VERSAO_NOVA'];
-                    $vab = $item['VERSAO_ATUAL'];
-                }
-                if ($va != $vab) {
-                    $atualAplicDAO->updAtualNova($equip, $va, $this->base);
+                if ($va != $vn) {
+                    $retAtualApp = 1;
                 } else {
-                    if ($va != $vn) {
-                        $retorno = 'SIM';
-                    } else {
-                        if (strcmp($va, $vab) <> 0) {
-                            $atualAplicDAO->updAtual($equip, $va, $this->base);
-                        }
+                    if (strcmp($va, $vab) <> 0) {
+                        $atualAplicDAO->updAtual($equip, $va);
                     }
                 }
             }
-            return $retorno;
-//            $dthr = $atualAplicDAO->dataHora($this->base);
-//            if ($retorno == 'SIM') {
-//                return $retorno;
-//            } else {
-//                return $retorno . "#" . $dthr;
-//            }
-        
         }
         
+        $dado = array("flagAtualApp" => $retAtualApp, "minutosParada" => 2, "horaFechBoletim" => 4);
+        return json_encode(array("parametro"=>array($dado)));
+
     }
     
 }

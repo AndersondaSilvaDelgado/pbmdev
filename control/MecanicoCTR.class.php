@@ -5,7 +5,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../model/dao/LogDAO.class.php');
 require_once('../model/dao/BoletimMecanDAO.class.php');
 require_once('../model/dao/ApontMecanDAO.class.php');
 
@@ -16,20 +15,13 @@ require_once('../model/dao/ApontMecanDAO.class.php');
  */
 class MecanicoCTR {
 
-    private $base = 2;
-
-    public function salvarBolFechado($info, $pagina) {
+    public function salvarBolMecanFechado($info) {
 
         $dados = $info['dado'];
-        $this->salvarLog($dados, $pagina);
+        $array = explode("_", $dados);
 
-        $pos1 = strpos($dados, "_") + 1;
-
-        $b = substr($dados, 0, ($pos1 - 1));
-        $a = substr($dados, $pos1);
-
-        $jsonObjBoletim = json_decode($b);
-        $jsonObjAponta = json_decode($a);
+        $jsonObjBoletim = json_decode($array[0]);
+        $jsonObjAponta = json_decode($array[1]);
 
         $dadosBoletim = $jsonObjBoletim->boletim;
         $dadosAponta = $jsonObjAponta->aponta;
@@ -37,33 +29,28 @@ class MecanicoCTR {
         $boletimMecanDAO = new BoletimMecanDAO();
         $idBolArray = array();
         foreach ($dadosBoletim as $bol) {
-            $v = $boletimMecanDAO->verifBol($bol, $this->base);
+            $v = $boletimMecanDAO->verifBolMecan($bol);
             if ($v == 0) {
-                $boletimMecanDAO->insBolFechado($bol, $this->base);
+                $boletimMecanDAO->insBolMecanFechado($bol);
             } else {
-                $boletimMecanDAO->updBolFechado($bol, $this->base);
+                $boletimMecanDAO->updBolMecanFechado($bol);
             }
-            $idBol = $boletimMecanDAO->idBol($bol, $this->base);
-            $this->salvarApont($idBol, $bol->idBoletim, $dadosAponta);
-            $idBolArray[] = array("idBoletim" => $bol->idBoletim);
+            $idBol = $boletimMecanDAO->idBol($bol);
+            $retApont = $this->salvarApontMecan($idBol, $bol->idBolMecan, $dadosAponta);
+            $idBolArray[] = array("idBoletim" => $bol->idBolMecan);
         }
         $dadoBol = array("boletim"=>$idBolArray);
         $retBol = json_encode($dadoBol);
-        return "BOLFECHADOMEC#" . $retBol . "_";
+        return "BOLFECHADOMEC_" . $retBol . "_" . $retApont;
     }
 
-    public function salvarBolAberto($info, $pagina) {
+    public function salvarBolMecanAberto($info) {
 
         $dados = $info['dado'];
-        $this->salvarLog($dados, $pagina);
+        $array = explode("_",$dados);
 
-        $pos1 = strpos($dados, "_") + 1;
-
-        $b = substr($dados, 0, ($pos1 - 1));
-        $a = substr($dados, $pos1);
-
-        $jsonObjBoletim = json_decode($b);
-        $jsonObjAponta = json_decode($a);
+        $jsonObjBoletim = json_decode($array[0]);
+        $jsonObjAponta = json_decode($array[1]);
 
         $dadosBoletim = $jsonObjBoletim->boletim;
         $dadosAponta = $jsonObjAponta->aponta;
@@ -71,46 +58,43 @@ class MecanicoCTR {
         $boletimMecanDAO = new BoletimMecanDAO();
         $idBolArray = array();
         foreach ($dadosBoletim as $bol) {
-            $v = $boletimMecanDAO->verifBol($bol, $this->base);
+            $v = $boletimMecanDAO->verifBolMecan($bol);
             if ($v == 0) {
-                $boletimMecanDAO->insBolAberto($bol, $this->base);
+                $boletimMecanDAO->insBolMecanAberto($bol);
             }
-            $idBol = $boletimMecanDAO->idBol($bol, $this->base);
-            $retApont = $this->salvarApont($idBol, $bol->idBoletim, $dadosAponta);
-            $idBolArray[] = array("idBoletim" => $bol->idBoletim, "idExtBoletim" => $idBol);
+            $idBol = $boletimMecanDAO->idBolMecan($bol);
+            $retApont = $this->salvarApontMecan($idBol, $bol->idBolMecan, $dadosAponta);
+            $idBolArray[] = array("idBolMecan" => $bol->idBolMecan, "idExtBolMecan" => $idBol);
         }
         $dadoBol = array("boletim"=>$idBolArray);
         $retBol = json_encode($dadoBol);
-        $retorno = "BOLABERTOMEC#" . $retBol . "_" . $retApont;
+        $retorno = "BOLABERTOMEC_" . $retBol . "_" . $retApont;
         return $retorno;
     }
 
-    private function salvarApont($idBolBD, $idBolCel, $dadosAponta) {
+    private function salvarApontMecan($idBolBD, $idBolCel, $dadosAponta) {
         $apontMecanDAO = new ApontMecanDAO();
         $idApontArray = array();
         foreach ($dadosAponta as $apont) {
-            if ($idBolCel == $apont->idBolApont) {
-                $v = $apontMecanDAO->verifApont($idBolBD, $apont, $this->base);
+            if ($idBolCel == $apont->idBolApontMecan) {
+                $v = $apontMecanDAO->verifApontMecan($idBolBD, $apont);
                 if ($v == 0) {
-                    if ($apont->dthrFinalApont == "") {
-                        $apontMecanDAO->insApontAberto($idBolBD, $apont, $this->base);
-                    } else {
-                        $apontMecanDAO->insApontFechado($idBolBD, $apont, $this->base);
+                    if($apont->statusApontMecan == 1){
+                        $apontMecanDAO->insApontMecanAberto($idBolBD, $apont);
+                    } else if($apont->statusApontMecan == 3){
+                        $apontMecanDAO->insApontMecanFechado($idBolBD, $apont);
                     }
                 } else {
-                    $apontMecanDAO->updApont($idBolBD, $apont, $this->base);
+                    if($apont->statusApontMecan == 3){
+                        $apontMecanDAO->updApontMecan($idBolBD, $apont);
+                    }
                 }
-                $idApontArray[] = array("idApont" => $apont->idApont, "idBolApont" => $idBolCel);
+                $idApontArray[] = array("idApontMecan" => $apont->idApontMecan, "idBolApontMecan" => $idBolCel);
             }
         }
         $dadoApont = array("apont"=>$idApontArray);
         $retApont = json_encode($dadoApont);
         return $retApont;
-    }
-
-    private function salvarLog($dados, $pagina) {
-        $logDAO = new LogDAO();
-        $logDAO->salvarDados($dados, $pagina, $this->base);
     }
 
 }

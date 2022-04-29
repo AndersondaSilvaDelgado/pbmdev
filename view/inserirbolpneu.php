@@ -7,6 +7,6 @@ $info = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 if (isset($info)):
 
     $inserirDadosPneuCTR = new InserirDadosPneuCTR();
-    echo $inserirDadosPneuCTR->salvarDadosPneu($info, "inserirapont");
+    echo $inserirDadosPneuCTR->salvarDadosPneu($info);
     
 endif;

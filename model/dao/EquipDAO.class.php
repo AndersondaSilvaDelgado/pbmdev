@@ -20,17 +20,21 @@ class EquipDAO extends Conn  {
     /** @var PDO */
     private $Conn;
 
-    public function dados($base) {
+    public function dados() {
 
         $select = " SELECT " 
-                . " EQUIP_ID AS \"idEquip\" "
-                . " , NRO_EQUIP AS \"nroEquip\" "
+                . " E.EQUIP_ID AS \"idEquip\" "
+                . " , E.NRO_EQUIP AS \"nroEquip\""
+                . " , CARACTER(CO.DESCR) AS \"descrClasseEquip\""
                 . " FROM "
-                . " USINAS.EQUIP "
+                . " USINAS.EQUIP E"
+                . " , USINAS.CLASSE_OPER CO "
                 . " WHERE " 
-                . " DT_DESAT IS NULL ";
+                . " DT_DESAT IS NULL "
+                . " AND "
+                . " E.CLASSOPER_ID = CO.CLASSOPER_ID ";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

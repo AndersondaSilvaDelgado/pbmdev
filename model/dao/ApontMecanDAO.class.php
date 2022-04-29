@@ -16,18 +16,18 @@ class ApontMecanDAO extends Conn {
 
     //put your code here
 
-    public function verifApont($idBol, $apont, $base) {
+    public function verifApontMecan($idBol, $apont) {
 
         $select = " SELECT "
                 . " COUNT(*) AS QTDE "
                 . " FROM "
                 . " PBM_APONTAMENTO "
                 . " WHERE "
-                . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
+                . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApontMecan . "','DD/MM/YYYY HH24:MI') "
                 . " AND "
                 . " BOLETIM_ID = " . $idBol;
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();
@@ -40,12 +40,10 @@ class ApontMecanDAO extends Conn {
         return $v;
     }
 
-    public function insApontAberto($idBol, $apont, $base) {
+    public function insApontMecanAberto($idBol, $apont) {
 
-        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
-
-        if ($apont->osApont == 0) {
-            $apont->osApont = 'NULL';
+        if ($apont->nroOSApont == 0) {
+            $apont->nroOSApont = 'NULL';
         }
 
         if ($apont->itemOSApont == 0) {
@@ -71,37 +69,35 @@ class ApontMecanDAO extends Conn {
                 . " ) "
                 . " VALUES ("
                 . " " . $idBol
-                . " , " . $apont->osApont
-                . " , " . $apont->itemOSApont
-                . " , " . $apont->paradaApont
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont, $base)
-                . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
+                . " , " . $apont->nroOSApontMecan
+                . " , " . $apont->itemOSApontMecan
+                . " , " . $apont->paradaApontMecan
+                . " , TO_DATE('" . $apont->dthrInicialApontMecan . "','DD/MM/YYYY HH24:MI') "
+                . " , TO_DATE('" . $apont->dthrInicialApontMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " , NULL "
                 . " , NULL "
                 . " , NULL "
-                . " , " . $apont->realizApont
+                . " , " . $apont->realizApontMecan
                 . " )";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }
 
-    public function insApontFechado($idBol, $apont, $base) {
+    public function insApontMecanFechado($idBol, $apont) {
 
-        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
-
-        if ($apont->osApont == 0) {
-            $apont->osApont = 'NULL';
+        if ($apont->osApontMecan == 0) {
+            $apont->osApontMecan = 'NULL';
         }
 
-        if ($apont->itemOSApont == 0) {
-            $apont->itemOSApont = 'NULL';
+        if ($apont->itemOSApontMecan == 0) {
+            $apont->itemOSApontMecan = 'NULL';
         }
 
-        if ($apont->paradaApont == 0) {
-            $apont->paradaApont = 'NULL';
+        if ($apont->paradaApontMecan == 0) {
+            $apont->paradaApontMecan = 'NULL';
         }
 
         $sql = "INSERT INTO PBM_APONTAMENTO ("
@@ -119,39 +115,37 @@ class ApontMecanDAO extends Conn {
                 . " ) "
                 . " VALUES ("
                 . " " . $idBol
-                . " , " . $apont->osApont
-                . " , " . $apont->itemOSApont
-                . " , " . $apont->paradaApont
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrInicialApont)
-                . " , TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI')"
+                . " , " . $apont->osApontMecan
+                . " , " . $apont->itemOSApontMecan
+                . " , " . $apont->paradaApontMecan
+                . " , TO_DATE('" . $apont->dthrInicialApontMecan . "','DD/MM/YYYY HH24:MI') "
+                . " , TO_DATE('" . $apont->dthrInicialApontMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont)
-                . " , TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI')"
+                . " , TO_DATE('" . $apont->dthrFinalApontMecan . "','DD/MM/YYYY HH24:MI') "
+                . " , TO_DATE('" . $apont->dthrFinalApontMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
-                . " , " . $apont->realizApont
+                . " , " . $apont->realizApontMecan
                 . " )";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }
 
-    public function updApont($idBol, $apont, $base) {
-
-        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
+    public function updApontMecan($idBol, $apont) {
 
         $sql = "UPDATE PBM_APONTAMENTO"
                 . " SET "
-                . " DTHR_FINAL = " . $ajusteDataHoraDAO->dataHoraGMT($apont->dthrFinalApont, $base)
-                . " , DTHR_CEL_FINAL = TO_DATE('" . $apont->dthrFinalApont . "','DD/MM/YYYY HH24:MI') "
+                . " DTHR_FINAL = TO_DATE('" . $apont->dthrFinalApontMecan . "','DD/MM/YYYY HH24:MI') "
+                . " , DTHR_CEL_FINAL = TO_DATE('" . $apont->dthrFinalApontMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , DTHR_TRANS_FINAL = SYSDATE "
-                . " , IND_REALIZ = " . $apont->realizApont
+                . " , IND_REALIZ = " . $apont->realizApontMecan
                 . " WHERE "
-                . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApont . "','DD/MM/YYYY HH24:MI') "
+                . " DTHR_CEL_INICIAL = TO_DATE('" . $apont->dthrInicialApontMecan . "','DD/MM/YYYY HH24:MI') "
                 . " AND "
                 . " BOLETIM_ID = " . $idBol;
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($sql);
         $this->Create->execute();
     }

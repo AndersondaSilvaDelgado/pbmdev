@@ -20,7 +20,7 @@ class PneuDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($pneu, $base) {
+    public function dados($pneu) {
 
         $select = " SELECT "
                 . " EQUIPCOMPO_ID AS \"idPneu\" "
@@ -30,7 +30,7 @@ class PneuDAO extends Conn {
                 . " WHERE "
                 . " CD LIKE '" . $pneu . "'";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

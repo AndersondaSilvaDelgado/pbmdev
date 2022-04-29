@@ -20,7 +20,7 @@ class EscalaTrabDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($base) {
+    public function dados() {
 
         $select = " SELECT DISTINCT "
                     . " E.ESCALATRAB_ID AS \"idEscalaTrab\" "
@@ -32,7 +32,7 @@ class EscalaTrabDAO extends Conn {
                     . " E.ESCALATRAB_ID "
                 . " ASC ";
         
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

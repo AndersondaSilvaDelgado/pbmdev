@@ -16,18 +16,14 @@ class BoletimPneuDAO extends Conn {
 
     //put your code here
 
-    public function verifBoletimPneu($bolPneu, $tipoAplic) {
+    public function verifBoletimPneu($bolPneu) {
 
         $select = " SELECT "
                 . " COUNT(*) AS QTDE "
                 . " FROM "
                 . " PMP_BOLETIM "
                 . " WHERE "
-                . " FUNC_MATRIC = " . $bolPneu->funcBolPneu
-                . " AND "
-                . " EQUIP_ID = " . $bolPneu->equipBolPneu
-                . " AND "
-                . " TIPO_APLIC = " . $tipoAplic
+                . " CEL_ID = " . $bolPneu->idBolPneu
                 . " AND "
                 . " DTHR_CEL = TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') ";
 
@@ -44,18 +40,14 @@ class BoletimPneuDAO extends Conn {
         return $v;
     }
 
-    public function idBoletimPneu($bolPneu, $tipoAplic) {
+    public function idBoletimPneu($bolPneu) {
 
         $select = " SELECT "
                 . " ID AS IDBOLPNEU "
                 . " FROM "
                 . " PMP_BOLETIM "
                 . " WHERE "
-                . " FUNC_MATRIC = " . $bolPneu->funcBolPneu
-                . " AND "
-                . " EQUIP_ID = " . $bolPneu->equipBolPneu
-                . " AND "
-                . " TIPO_APLIC = " . $tipoAplic
+                . " CEL_ID = " . $bolPneu->idBolPneu
                 . " AND "
                 . " DTHR_CEL = TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') ";
 

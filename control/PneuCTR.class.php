@@ -5,7 +5,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../model/dao/LogDAO.class.php');
 require_once('../model/dao/BoletimPneuDAO.class.php');
 require_once('../model/dao/ItemMedPneuDAO.class.php');
 require_once('../model/dao/ItemManutPneuDAO.class.php');
@@ -17,21 +16,15 @@ require_once('../model/dao/ItemManutPneuDAO.class.php');
  */
 class InserirDadosPneuCTR {
 
-    public function salvarDadosPneu($info, $pagina) {
+    public function salvarDadosPneu($info) {
 
         $dados = $info['dado'];
-        $this->salvarLog($dados, $pagina);
 
-        $pos1 = strpos($dados, "_") + 1;
-        $pos2 = strpos($dados, "|") + 1;
+        $array = explode("_", $dados);
 
-        $bolpneu = substr($dados, 0, ($pos1 - 1));
-        $itemmedpneu = substr($dados, $pos1, (($pos2 - 1) - $pos1));
-        $itemmanutpneu = substr($dados, $pos2);
-
-        $jsonObjBolPneu = json_decode($bolpneu);
-        $jsonObjItemMedPneu = json_decode($itemmedpneu);
-        $jsonObjItemManutPneu = json_decode($itemmanutpneu);
+        $jsonObjBolPneu = json_decode($array[0]);
+        $jsonObjItemMedPneu = json_decode($array[1]);
+        $jsonObjItemManutPneu = json_decode($array[2]);
 
         $dadosBolPneu = $jsonObjBolPneu->bolpneu;
         $dadosItemMedPneu = $jsonObjItemMedPneu->itemmedpneu;
@@ -39,16 +32,19 @@ class InserirDadosPneuCTR {
 
         $boletimPneuDAO = new BoletimPneuDAO();
 
-        foreach ($dadosBolPneu as $bol) {
-            $v = $boletimPneuDAO->verifBoletimPneu($bol, 3);
+        foreach ($dadosBolPneu as $bolPneu) {
+            $v = $boletimPneuDAO->verifBoletimPneu($bolPneu);
             if ($v == 0) {
-                $boletimPneuDAO->insBoletimPneu($bol, 3);
+                $boletimPneuDAO->insBoletimPneu($bolPneu, 3);
             }
-            $idBol = $boletimPneuDAO->idBoletimPneu($bol, 3);
+            $idBol = $boletimPneuDAO->idBoletimPneu($bolPneu);
             $this->salvarApontMed($idBol, $bol->idBolPneu, $dadosItemMedPneu);
             $this->salvarApontManut($idBol, $bol->idBolPneu, $dadosItemManutPneu);
+            $idBolPneuArray[] = array("idBolPneu" => $bolPneu->idBolPneu);
         }
-        echo 'GRAVOUPNEU';
+        $dadoBolPneu = array("boletimpneu"=>$idBolPneuArray);
+        $retBolPneu = json_encode($dadoBolPneu);
+        echo 'BOLPNEU_' . $retBolPneu;
     }
 
     private function salvarApontMed($idBolBD, $idBolCel, $dadosItemMedPneu) {
@@ -73,11 +69,6 @@ class InserirDadosPneuCTR {
                 }
             }
         }
-    }
-
-    private function salvarLog($dados, $pagina) {
-        $logDAO = new LogDAO();
-        $logDAO->salvarDados($dados, $pagina);
     }
 
 }

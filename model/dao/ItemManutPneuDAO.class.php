@@ -25,13 +25,7 @@ class ItemManutPneuDAO extends Conn {
                 . " WHERE "
                 . " BOLETIM_ID = " . $idBolPneu
                 . " AND "
-                . " POSPNCONF_ID  = " . $itemManutPneu->posItemManutPneu
-                . " AND "
-                . " NRO_PNEU_RET LIKE '" . $itemManutPneu->nroPneuRetItemManutPneu . "'"
-                . " AND "
-                . " NRO_PNEU_COL LIKE '" . $itemManutPneu->nroPneuColItemManutPneu . "'"
-                . " AND "
-                . " DTHR_CEL = TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') ";
+                . " CEL_ID = " . $itemManutPneu->idItemMedPneu;
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -48,8 +42,6 @@ class ItemManutPneuDAO extends Conn {
 
     public function insItemManutPneu($idBolPneu, $itemManutPneu) {
 
-        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
-
         $sql = "INSERT INTO PMP_ITEM_MANUT ("
                 . " BOLETIM_ID "
                 . " , POSPNCONF_ID "
@@ -64,7 +56,7 @@ class ItemManutPneuDAO extends Conn {
                 . " , " . $itemManutPneu->posItemManutPneu
                 . " , '" . $itemManutPneu->nroPneuRetItemManutPneu . "'"
                 . " , '" . $itemManutPneu->nroPneuColItemManutPneu . "'"
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($itemManutPneu->dthrItemManutPneu)
+                . " , TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " )";

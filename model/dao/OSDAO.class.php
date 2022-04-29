@@ -12,7 +12,6 @@ require_once ('../dbutil/Conn.class.php');
  * @author anderson
  */
 class OSDAO extends Conn {
-    //put your code here
     
     /** @var PDOStatement */
     private $Read;
@@ -20,19 +19,18 @@ class OSDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($os, $base) {
+    public function dados($os) {
 
         $select = " SELECT "
                     . " OS_ID AS \"idOS\" "
                     . " , NRO AS \"nroOS\" "
-                    . " , NRO_EQUIP AS \"equipOS\" "
-                    . " , DESCR AS \"descrEquipOS\" "
+                    . " , EQUIP_ID AS \"idEquip\" "
                 . " FROM "
                     . " VMB_OS_AUTO "
                 . " WHERE "
                     . " NRO = " . $os;
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

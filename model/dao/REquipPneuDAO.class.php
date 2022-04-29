@@ -20,7 +20,7 @@ class REquipPneuDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($base) {
+    public function dados() {
 
         $select = " SELECT "
                 . " VEP.EQUIP_ID AS \"idEquip\" "
@@ -29,7 +29,7 @@ class REquipPneuDAO extends Conn {
                 . " FROM "
                 . " VMB_EQUIP_PNEU VEP ";
 
-        $this->Conn = parent::getConn($base);
+        $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
         $this->Read->setFetchMode(PDO::FETCH_ASSOC);
         $this->Read->execute();

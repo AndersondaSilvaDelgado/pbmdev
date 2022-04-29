@@ -22,167 +22,111 @@ require_once('../model/dao/ServicoDAO.class.php');
  */
 class BaseDadosCTR {
     
-    private $base = 1;
-    
-    public function dadosColab($versao) {
-        
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-            
-            $colabDAO = new ColabDAO();
-        
-            $dados = array("dados"=>$colabDAO->dados($this->base));
-            $json_str = json_encode($dados);
+    public function dadosColab() {
 
-            return $json_str;
-        
-        }
-        
+        $colabDAO = new ColabDAO();
+
+        $dados = array("dados"=>$colabDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
     }
     
-    public function dadosComponente($versao) {
-        
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-            
-            $componenteDAO = new ComponenteDAO();
-        
-            $dados = array("dados"=>$componenteDAO->dados($this->base));
-            $json_str = json_encode($dados);
+    public function dadosComponente() {
 
-            return $json_str;
-        
-        }
-        
+        $componenteDAO = new ComponenteDAO();
+
+        $dados = array("dados"=>$componenteDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
     }
 
-    public function dadosEquip($versao) {
-        
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-            
-            $equipDAO = new EquipDAO();
-        
-            $dados = array("dados"=>$equipDAO->dados($this->base));
-            $json_str = json_encode($dados);
+    public function dadosEquip() {
 
-            return $json_str;
-        
-        }
-        
+        $equipDAO = new EquipDAO();
+
+        $dados = array("dados"=>$equipDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
     }
     
-    public function dadosEscalaTrab($versao) {
-        
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-            
-            $escalaTrabDAO = new EscalaTrabDAO();
-        
-            $dados = array("dados"=>$escalaTrabDAO->dados($this->base));
-            $json_str = json_encode($dados);
+    public function dadosEscalaTrab() {
 
-            return $json_str;
-        
-        }
-        
+        $escalaTrabDAO = new EscalaTrabDAO();
+
+        $dados = array("dados"=>$escalaTrabDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
     }
     
-    public function dadosOS($versao, $info) {
+    public function dadosOS($info) {
 
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-        
-            $osDAO = new OSDAO();
-            $itemOSDAO = new ItemOSDAO();
+        $osDAO = new OSDAO();
+        $itemOSDAO = new ItemOSDAO();
 
-            $dado = $info['dado'];
+        $dado = $info['dado'];
 
-            $dadosOS = array("dados" => $osDAO->dados($dado, $this->base));
-            $resOS = json_encode($dadosOS);
+        $dadosOS = array("dados" => $osDAO->dados($dado));
+        $resOS = json_encode($dadosOS);
 
-            $dadosItemOS = array("dados" => $itemOSDAO->dados($dado, $this->base));
-            $resItemOS = json_encode($dadosItemOS);
+        $dadosItemOS = array("dados" => $itemOSDAO->dados($dado));
+        $resItemOS = json_encode($dadosItemOS);
 
-            return $resOS . "#" . $resItemOS;
+        return $resOS . "_" . $resItemOS;
 
-        }
-        
     }
 
-    public function dadosParada($versao) {
-        
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-            
-            $paradaDAO = new ParadaDAO();
-        
-            $dados = array("dados"=>$paradaDAO->dados($this->base));
-            $json_str = json_encode($dados);
+    public function dadosParada() {
 
-            return $json_str;
-        
-        }
-        
+        $paradaDAO = new ParadaDAO();
+
+        $dados = array("dados"=>$paradaDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
     }
     
-    public function dadosPneu($versao, $info) {
-        
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-            
-            $pneuDAO = new PneuDAO();
+    public function dadosPneu($info) {
 
-            $dado = $info['dado'];
-            
-            $dados = array("dados" => $pneuDAO->dados($dado, $this->base));
-            $json_str = json_encode($dados);
+        $pneuDAO = new PneuDAO();
 
-            return $json_str;
-        
-        }
-        
+        $dado = $info['dado'];
+
+        $dados = array("dados" => $pneuDAO->dados($dado));
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
     }
     
-    public function dadosREquipPneu($versao) {
-        
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-        
-            $rEquipPneuDAO = new REquipPneuDAO();
+    public function dadosREquipPneu() {
 
-            $dados = array("dados"=>$rEquipPneuDAO->dados($this->base));
-            $json_str = json_encode($dados);
+        $rEquipPneuDAO = new REquipPneuDAO();
 
-            return $json_str;
-        
-        }
-        
+        $dados = array("dados"=>$rEquipPneuDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
     }
     
-    public function dadosServico($versao) {
-        
-        $versao = str_replace("_", ".", $versao);
-       
-        if($versao >= 2.00){
-        
-            $servicoDAO = new ServicoDAO();
+    public function dadosServico() {
 
-            $dados = array("dados"=>$servicoDAO->dados($this->base));
-            $json_str = json_encode($dados);
+        $servicoDAO = new ServicoDAO();
 
-            return $json_str;
-        
-        }
-        
+        $dados = array("dados"=>$servicoDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
     }
     
 }
