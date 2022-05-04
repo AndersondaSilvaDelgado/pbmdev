@@ -42,16 +42,16 @@ class ApontMecanDAO extends Conn {
 
     public function insApontMecanAberto($idBol, $apont) {
 
-        if ($apont->nroOSApont == 0) {
-            $apont->nroOSApont = 'NULL';
+        if ($apont->nroOSApontMecan == 0) {
+            $apont->nroOSApontMecan = 'NULL';
         }
 
-        if ($apont->itemOSApont == 0) {
-            $apont->itemOSApont = 'NULL';
+        if ($apont->itemOSApontMecan == 0) {
+            $apont->itemOSApontMecan = 'NULL';
         }
 
-        if ($apont->paradaApont == 0) {
-            $apont->paradaApont = 'NULL';
+        if ($apont->paradaApontMecan == 0) {
+            $apont->paradaApontMecan = 'NULL';
         }
 
         $sql = "INSERT INTO PBM_APONTAMENTO ("
@@ -88,8 +88,8 @@ class ApontMecanDAO extends Conn {
 
     public function insApontMecanFechado($idBol, $apont) {
 
-        if ($apont->osApontMecan == 0) {
-            $apont->osApontMecan = 'NULL';
+        if ($apont->nroOSApontMecan == 0) {
+            $apont->nroOSApontMecan = 'NULL';
         }
 
         if ($apont->itemOSApontMecan == 0) {
@@ -115,7 +115,7 @@ class ApontMecanDAO extends Conn {
                 . " ) "
                 . " VALUES ("
                 . " " . $idBol
-                . " , " . $apont->osApontMecan
+                . " , " . $apont->nroOSApontMecan
                 . " , " . $apont->itemOSApontMecan
                 . " , " . $apont->paradaApontMecan
                 . " , TO_DATE('" . $apont->dthrInicialApontMecan . "','DD/MM/YYYY HH24:MI') "

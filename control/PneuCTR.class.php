@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 require_once('../model/dao/BoletimPneuDAO.class.php');
-require_once('../model/dao/ItemMedPneuDAO.class.php');
+require_once('../model/dao/ItemCalibPneuDAO.class.php');
 require_once('../model/dao/ItemManutPneuDAO.class.php');
 
 /**
@@ -14,7 +14,7 @@ require_once('../model/dao/ItemManutPneuDAO.class.php');
  *
  * @author anderson
  */
-class InserirDadosPneuCTR {
+class PneuCTR {
 
     public function salvarDadosPneu($info) {
 
@@ -23,11 +23,11 @@ class InserirDadosPneuCTR {
         $array = explode("_", $dados);
 
         $jsonObjBolPneu = json_decode($array[0]);
-        $jsonObjItemMedPneu = json_decode($array[1]);
+        $jsonObjItemCalibPneu = json_decode($array[1]);
         $jsonObjItemManutPneu = json_decode($array[2]);
 
         $dadosBolPneu = $jsonObjBolPneu->bolpneu;
-        $dadosItemMedPneu = $jsonObjItemMedPneu->itemmedpneu;
+        $dadosItemCalibPneu = $jsonObjItemCalibPneu->itemcalibpneu;
         $dadosItemManutPneu = $jsonObjItemManutPneu->itemmanutpneu;
 
         $boletimPneuDAO = new BoletimPneuDAO();
@@ -38,22 +38,22 @@ class InserirDadosPneuCTR {
                 $boletimPneuDAO->insBoletimPneu($bolPneu, 3);
             }
             $idBol = $boletimPneuDAO->idBoletimPneu($bolPneu);
-            $this->salvarApontMed($idBol, $bol->idBolPneu, $dadosItemMedPneu);
-            $this->salvarApontManut($idBol, $bol->idBolPneu, $dadosItemManutPneu);
+            $this->salvarApontCalib($idBol, $bolPneu->idBolPneu, $dadosItemCalibPneu);
+            $this->salvarApontManut($idBol, $bolPneu->idBolPneu, $dadosItemManutPneu);
             $idBolPneuArray[] = array("idBolPneu" => $bolPneu->idBolPneu);
         }
         $dadoBolPneu = array("boletimpneu"=>$idBolPneuArray);
         $retBolPneu = json_encode($dadoBolPneu);
-        echo 'BOLPNEU_' . $retBolPneu;
+        echo 'BOLETIMPNEU_' . $retBolPneu;
     }
 
-    private function salvarApontMed($idBolBD, $idBolCel, $dadosItemMedPneu) {
-        $itemMedPneuDAO = new ItemMedPneuDAO();
-        foreach ($dadosItemMedPneu as $itemMedPneu) {
-            if ($idBolCel == $itemMedPneu->idBolItemMedPneu) {
-                $v = $itemMedPneuDAO->verifItemMedPneu($idBolBD, $itemMedPneu);
+    private function salvarApontCalib($idBolBD, $idBolCel, $dadosItemCalibPneu) {
+        $itemCalibPneuDAO = new ItemCalibPneuDAO();
+        foreach ($dadosItemCalibPneu as $itemCalibPneu) {
+            if ($idBolCel == $itemCalibPneu->idBolItemCalibPneu) {
+                $v = $itemCalibPneuDAO->verifItemCalibPneu($idBolBD, $itemCalibPneu);
                 if ($v == 0) {
-                    $itemMedPneuDAO->insItemMedPneu($idBolBD, $itemMedPneu);
+                    $itemCalibPneuDAO->insItemCalibPneu($idBolBD, $itemCalibPneu);
                 }
             }
         }

@@ -20,7 +20,24 @@ class PneuDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($pneu) {
+    public function dados() {
+
+        $select = " SELECT "
+                . " EQUIPCOMPO_ID AS \"idPneu\" "
+                . " , CD AS \"codPneu\" "
+                . " FROM "
+                . " VMB_PNEU ";
+
+        $this->Conn = parent::getConn();
+        $this->Read = $this->Conn->prepare($select);
+        $this->Read->setFetchMode(PDO::FETCH_ASSOC);
+        $this->Read->execute();
+        $result = $this->Read->fetchAll();
+
+        return $result;
+    }
+    
+    public function pesq($pneu) {
 
         $select = " SELECT "
                 . " EQUIPCOMPO_ID AS \"idPneu\" "

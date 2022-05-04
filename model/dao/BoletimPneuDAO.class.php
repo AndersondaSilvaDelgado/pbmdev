@@ -6,7 +6,6 @@
  * and open the template in the editor.
  */
 require_once ('../dbutil/Conn.class.php');
-require_once ('../model/dao/AjusteDataHoraDAO.class.php');
 /**
  * Description of BoletimPneu
  *
@@ -43,7 +42,7 @@ class BoletimPneuDAO extends Conn {
     public function idBoletimPneu($bolPneu) {
 
         $select = " SELECT "
-                . " ID AS IDBOLPNEU "
+                . " ID AS ID "
                 . " FROM "
                 . " PMP_BOLETIM "
                 . " WHERE "
@@ -58,7 +57,7 @@ class BoletimPneuDAO extends Conn {
         $result = $this->Read->fetchAll();
 
         foreach ($result as $item) {
-            $id = $item['IDBOLPNEU'];
+            $id = $item['ID'];
         }
 
         return $id;
@@ -66,23 +65,23 @@ class BoletimPneuDAO extends Conn {
 
     public function insBoletimPneu($bolPneu, $tipoAplic) {
 
-        $ajusteDataHoraDAO = new AjusteDataHoraDAO();
-
         $sql = "INSERT INTO PMP_BOLETIM ("
-                . " FUNC_MATRIC "
+                . " FUNC_ID "
                 . " , EQUIP_ID "
                 . " , DTHR "
                 . " , DTHR_CEL "
                 . " , DTHR_TRANS "
                 . " , TIPO_APLIC "
+                . " , CEL_ID "
                 . " ) "
                 . " VALUES ("
-                . " " . $bolPneu->funcBolPneu
-                . " , " . $bolPneu->equipBolPneu
-                . " , " . $ajusteDataHoraDAO->dataHoraGMT($bolPneu->dthrBolPneu)
+                . " " . $bolPneu->idFuncBolPneu
+                . " , " . $bolPneu->idEquipBolPneu
+                . " , TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " , " . $tipoAplic
+                . " , " . $bolPneu->idBolPneu
                 . " )";
 
         $this->Conn = parent::getConn();

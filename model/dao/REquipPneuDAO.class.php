@@ -23,11 +23,11 @@ class REquipPneuDAO extends Conn {
     public function dados() {
 
         $select = " SELECT "
-                . " VEP.EQUIP_ID AS \"idEquip\" "
-                . " , VEP.POSPNCONF_ID AS \"idPosConfPneu\" "
-                . " , VEP.POS_PNEU AS \"posPneu\" "
-                . " FROM "
-                . " VMB_EQUIP_PNEU VEP ";
+                        . " VEP.EQUIP_ID AS \"idEquip\" "
+                        . " , VEP.POSPNCONF_ID AS \"idPosConfPneu\" "
+                        . " , VEP.POS_PNEU AS \"posPneu\" "
+                    . " FROM "
+                        . " VMB_EQUIP_PNEU VEP ";
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);

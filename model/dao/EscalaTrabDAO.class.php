@@ -27,7 +27,7 @@ class EscalaTrabDAO extends Conn {
                     . " , LPAD(E.HR_ENT1, 5, '0') AS \"horarioEntEscalaTrab\" "
                     . " , LPAD(E.HR_SAI2, 5, '0') AS \"horarioSaiEscalaTrab\" "
                 . " FROM "
-                    . "  USINAS.VMB_ESCALA_TRAB E"
+                    . " USINAS.VMB_ESCALA_TRAB E "
                 . " ORDER BY "
                     . " E.ESCALATRAB_ID "
                 . " ASC ";

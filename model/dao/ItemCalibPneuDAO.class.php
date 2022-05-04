@@ -6,7 +6,6 @@
  * and open the template in the editor.
  */
 require_once ('../dbutil/Conn.class.php');
-require_once ('../model/dao/AjusteDataHoraDAO.class.php');
 /**
  * Description of ItemMedPneu
  *
@@ -23,7 +22,7 @@ class ItemCalibPneuDAO extends Conn {
                 . " WHERE "
                 . " BOLETIM_ID = " . $idBolPneu
                 . " AND "
-                . " CEL_ID = " . $itemCalibPneu->idItemMedPneu;
+                . " CEL_ID = " . $itemCalibPneu->idItemCalibPneu;
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -49,16 +48,18 @@ class ItemCalibPneuDAO extends Conn {
                 . " , DTHR "
                 . " , DTHR_CEL "
                 . " , DTHR_TRANS "
+                . " , CEL_ID "
                 . " ) "
                 . " VALUES ("
                 . " " . $idBolPneu
-                . " , " . $itemCalibPneu->posItemCalibPneu
+                . " , " . $itemCalibPneu->idPosItemCalibPneu
                 . " , '" . $itemCalibPneu->nroPneuItemCalibPneu . "'"
                 . " , " . $itemCalibPneu->pressaoEncItemCalibPneu
                 . " , " . $itemCalibPneu->pressaoColItemCalibPneu
                 . " , TO_DATE('" . $itemCalibPneu->dthrItemCalibPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , TO_DATE('" . $itemCalibPneu->dthrItemCalibPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
+                . " , " . $itemCalibPneu->idItemCalibPneu
                 . " ) ";
 
         $this->Conn = parent::getConn();

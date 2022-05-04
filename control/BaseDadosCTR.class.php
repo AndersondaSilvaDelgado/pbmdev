@@ -15,6 +15,7 @@ require_once('../model/dao/ParadaDAO.class.php');
 require_once('../model/dao/PneuDAO.class.php');
 require_once('../model/dao/REquipPneuDAO.class.php');
 require_once('../model/dao/ServicoDAO.class.php');
+require_once('../model/dao/TipoManutDAO.class.php');
 /**
  * Description of BaseDadosCTR
  *
@@ -94,13 +95,24 @@ class BaseDadosCTR {
 
     }
     
-    public function dadosPneu($info) {
+    public function dadosPneu() {
+
+        $pneuDAO = new PneuDAO();
+
+        $dados = array("dados" => $pneuDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
+    }
+    
+    public function pesqPneu($info) {
 
         $pneuDAO = new PneuDAO();
 
         $dado = $info['dado'];
 
-        $dados = array("dados" => $pneuDAO->dados($dado));
+        $dados = array("dados" => $pneuDAO->pesq($dado));
         $json_str = json_encode($dados);
 
         return $json_str;
@@ -123,6 +135,17 @@ class BaseDadosCTR {
         $servicoDAO = new ServicoDAO();
 
         $dados = array("dados"=>$servicoDAO->dados());
+        $json_str = json_encode($dados);
+
+        return $json_str;
+
+    }
+    
+    public function dadosTipoManut() {
+
+        $tipoManutDAO = new TipoManutDAO();
+
+        $dados = array("dados"=>$tipoManutDAO->dados());
         $json_str = json_encode($dados);
 
         return $json_str;

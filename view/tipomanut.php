@@ -4,4 +4,4 @@ require_once('../control/BaseDadosCTR.class.php');
 
 $baseDadosCTR = new BaseDadosCTR();
 
-echo $baseDadosCTR->dadosPneu();
+echo $baseDadosCTR->dadosTipoManut();

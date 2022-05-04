@@ -26,7 +26,9 @@ class BoletimMecanDAO extends Conn {
                 . " WHERE "
                 . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " AND "
-                . " FUNC_ID = " . $bol->idFuncBolMecan . " ";
+                . " FUNC_ID = " . $bol->idFuncBolMecan
+                . " AND "
+                . " CEL_ID = " . $bol->idBolMecan;
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -50,7 +52,9 @@ class BoletimMecanDAO extends Conn {
                 . " WHERE "
                 . " DTHR_CEL_INICIAL = TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " AND "
-                . " FUNC_ID = " . $bol->idFuncBolMecan;
+                . " FUNC_ID = " . $bol->idFuncBolMecan
+                . " AND "
+                . " CEL_ID = " . $bol->idBolMecan;
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -74,6 +78,7 @@ class BoletimMecanDAO extends Conn {
                 . " , DTHR_CEL_INICIAL "
                 . " , DTHR_TRANS_INICIAL "
                 . " , STATUS "
+                . " , CEL_ID "
                 . " ) "
                 . " VALUES ("
                 . " " . $bol->idFuncBolMecan
@@ -82,6 +87,7 @@ class BoletimMecanDAO extends Conn {
                 . " , TO_DATE('" . $bol->dthrInicialBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " , 1 "
+                . " , " . $bol->idBolMecan
                 . " )";
 
         $this->Conn = parent::getConn();
@@ -102,6 +108,7 @@ class BoletimMecanDAO extends Conn {
                 . " , DTHR_TRANS_FINAL "
                 . " , STATUS "
                 . " , STATUS_FECH "
+                . " , CEL_ID "
                 . " ) "
                 . " VALUES ("
                 . " " . $bol->idFuncBolMecan
@@ -113,7 +120,8 @@ class BoletimMecanDAO extends Conn {
                 . " , TO_DATE('" . $bol->dthrFinalBolMecan . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
                 . " , 2 "
-                . " , " . $bol->statusFechBoletim
+                . " , " . $bol->statusFechBolMecan
+                . " , " . $bol->idBolMecan
                 . " )";
 
         $this->Conn = parent::getConn();
@@ -131,7 +139,7 @@ class BoletimMecanDAO extends Conn {
                 . " , DTHR_TRANS_FINAL = SYSDATE "
                 . " , STATUS_FECH = " . $bol->statusFechBolMecan
                 . " WHERE "
-                . " ID = " . $bol->idExtBoletim;
+                . " ID = " . $bol->idExtBolMecan;
 
         $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($sql);

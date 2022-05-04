@@ -6,7 +6,6 @@
  * and open the template in the editor.
  */
 require_once ('../dbutil/Conn.class.php');
-require_once ('../model/dao/AjusteDataHoraDAO.class.php');
 /**
  * Description of ItemManutPneuDAO
  *
@@ -25,7 +24,7 @@ class ItemManutPneuDAO extends Conn {
                 . " WHERE "
                 . " BOLETIM_ID = " . $idBolPneu
                 . " AND "
-                . " CEL_ID = " . $itemManutPneu->idItemMedPneu;
+                . " CEL_ID = " . $itemManutPneu->idItemManutPneu;
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -50,15 +49,17 @@ class ItemManutPneuDAO extends Conn {
                 . " , DTHR "
                 . " , DTHR_CEL "
                 . " , DTHR_TRANS "
+                . " , CEL_ID "
                 . " ) "
                 . " VALUES ("
                 . " " . $idBolPneu
-                . " , " . $itemManutPneu->posItemManutPneu
+                . " , " . $itemManutPneu->idPosItemManutPneu
                 . " , '" . $itemManutPneu->nroPneuRetItemManutPneu . "'"
                 . " , '" . $itemManutPneu->nroPneuColItemManutPneu . "'"
                 . " , TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , TO_DATE('" . $itemManutPneu->dthrItemManutPneu . "','DD/MM/YYYY HH24:MI') "
                 . " , SYSDATE "
+                . " , " . $itemManutPneu->idItemManutPneu
                 . " )";
 
         $this->Conn = parent::getConn();
