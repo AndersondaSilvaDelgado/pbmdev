@@ -5,7 +5,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require('../model/dao/AtualAplicDAO.class.php');
+require('../model/AtualAplicDAO.class.php');
 /**
  * Description of AtualAplicativoCTR
  *
@@ -48,10 +48,15 @@ class AtualAplicCTR {
                 }
             }
         }
-        
+        $atualAplicDAO->updUltAcesso($equip);
         $dado = array("flagAtualApp" => $retAtualApp, "minutosParada" => 2, "horaFechBoletim" => 4);
         return json_encode(array("parametro"=>array($dado)));
 
+    }
+    
+    public function parametro(){
+        $dado = array("minutosParada" => 2, "horaFechBoletim" => 4);
+        return json_encode(array("parametro"=>array($dado)));
     }
     
 }

@@ -5,9 +5,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../model/dao/BoletimPneuDAO.class.php');
-require_once('../model/dao/ItemCalibPneuDAO.class.php');
-require_once('../model/dao/ItemManutPneuDAO.class.php');
+require_once('../model/BoletimPneuDAO.class.php');
+require_once('../model/ItemCalibPneuDAO.class.php');
+require_once('../model/ItemManutPneuDAO.class.php');
 
 /**
  * Description of InserirDadosPneu

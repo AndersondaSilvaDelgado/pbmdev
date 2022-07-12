@@ -5,17 +5,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-require_once('../model/dao/ColabDAO.class.php');
-require_once('../model/dao/ComponenteDAO.class.php');
-require_once('../model/dao/EquipDAO.class.php');
-require_once('../model/dao/EscalaTrabDAO.class.php');
-require_once('../model/dao/ItemOSDAO.class.php');
-require_once('../model/dao/OSDAO.class.php');
-require_once('../model/dao/ParadaDAO.class.php');
-require_once('../model/dao/PneuDAO.class.php');
-require_once('../model/dao/REquipPneuDAO.class.php');
-require_once('../model/dao/ServicoDAO.class.php');
-require_once('../model/dao/TipoManutDAO.class.php');
+require_once('../model/ColabDAO.class.php');
+require_once('../model/ComponenteDAO.class.php');
+require_once('../model/EquipDAO.class.php');
+require_once('../model/EscalaTrabDAO.class.php');
+require_once('../model/ItemOSDAO.class.php');
+require_once('../model/OSDAO.class.php');
+require_once('../model/ParadaDAO.class.php');
+require_once('../model/PneuDAO.class.php');
+require_once('../model/REquipPneuDAO.class.php');
+require_once('../model/ServicoDAO.class.php');
+require_once('../model/TipoManutDAO.class.php');
 /**
  * Description of BaseDadosCTR
  *
