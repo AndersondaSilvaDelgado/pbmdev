@@ -19,7 +19,7 @@ class OSDAO extends Conn {
     /** @var PDO */
     private $Conn;
 
-    public function dados($os) {
+    public function dados($nroOS) {
 
         $select = " SELECT "
                     . " OS_ID AS \"idOS\" "
@@ -28,7 +28,7 @@ class OSDAO extends Conn {
                 . " FROM "
                     . " VMB_OS_AUTO "
                 . " WHERE "
-                    . " NRO = " . $os;
+                    . " NRO = " . $nroOS;
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);

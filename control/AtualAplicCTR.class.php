@@ -21,42 +21,63 @@ class AtualAplicCTR {
         $dados = $jsonObj->dados;
 
         foreach ($dados as $d) {
-            $equip = $d->idEquipAtual;
-            $va = $d->versaoAtual;
+            $idEquip = $d->idEquip;
+            $token = $d->token;
         }
 
         $retAtualApp = 0;
 
-        $v = $atualAplicDAO->verAtual($equip);
-        if ($v == 0) {
-            $atualAplicDAO->insAtual($equip, $va);
-        } else {
-            $result = $atualAplicDAO->retAtual($equip);
-            foreach ($result as $item) {
-                $vn = $item['VERSAO_NOVA'];
-                $vab = $item['VERSAO_ATUAL'];
-            }
-            if ($va != $vab) {
-                $atualAplicDAO->updAtualNova($equip, $va);
-            } else {
-                if ($va != $vn) {
-                    $retAtualApp = 1;
-                } else {
-                    if (strcmp($va, $vab) <> 0) {
-                        $atualAplicDAO->updAtual($equip, $va);
-                    }
-                }
-            }
+        
+        $v = $atualAplicDAO->verToken($token);
+        
+        if ($v > 0) {
+            
+            $atualAplicDAO->updUltAcesso($idEquip);
+            $dado = array("flagAtualApp" => $retAtualApp, "minutosParada" => 2, "horaFechBoletim" => 4);
+            return json_encode(array("parametro"=>array($dado)));
+        
         }
-        $atualAplicDAO->updUltAcesso($equip);
-        $dado = array("flagAtualApp" => $retAtualApp, "minutosParada" => 2, "horaFechBoletim" => 4);
-        return json_encode(array("parametro"=>array($dado)));
 
     }
+        
+    public function inserirAtualVersao($idEquip, $versao) {
+        $atualAplicDAO = new AtualAplicDAO();
+        $v = $atualAplicDAO->verAtual($idEquip);
+        if ($v == 0) {
+            $atualAplicDAO->insAtual($idEquip, $versao);
+        } else {
+            $atualAplicDAO->updAtual($idEquip, $versao);
+        }
+    }
+
+    public function verifToken($info){
+        
+        $jsonObj = json_decode($info['dado']);
+        $dados = $jsonObj->dados;
+
+        foreach ($dados as $d) {
+            $token = $d->token;
+        }
+        
+        $atualAplicDAO = new AtualAplicDAO();
+        $v = $atualAplicDAO->verToken($token);
+        
+        if ($v > 0) {
+            return true;
+        } else {
+            return false;
+        }
+        
+    }
     
-    public function parametro(){
-        $dado = array("minutosParada" => 2, "horaFechBoletim" => 4);
-        return json_encode(array("parametro"=>array($dado)));
+    public function parametro($info){
+        
+        if($this->verifToken($info)){
+        
+            $dado = array("minutosParada" => 2, "horaFechBoletim" => 4);
+            return json_encode(array("parametro"=>array($dado)));
+        
+        }
     }
     
 }

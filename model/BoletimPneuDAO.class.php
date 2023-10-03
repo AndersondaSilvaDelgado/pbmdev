@@ -18,13 +18,13 @@ class BoletimPneuDAO extends Conn {
     public function verifBoletimPneu($bolPneu) {
 
         $select = " SELECT "
-                . " COUNT(*) AS QTDE "
-                . " FROM "
-                . " PMP_BOLETIM "
-                . " WHERE "
-                . " CEL_ID = " . $bolPneu->idBolPneu
-                . " AND "
-                . " DTHR_CEL = TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') ";
+                        . " COUNT(*) AS QTDE "
+                    . " FROM "
+                        . " PMP_BOLETIM "
+                    . " WHERE "
+                        . " CEL_ID = " . $bolPneu->idBolPneu
+                        . " AND "
+                        . " DTHR_CEL = TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') ";
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -42,13 +42,13 @@ class BoletimPneuDAO extends Conn {
     public function idBoletimPneu($bolPneu) {
 
         $select = " SELECT "
-                . " ID AS ID "
-                . " FROM "
-                . " PMP_BOLETIM "
-                . " WHERE "
-                . " CEL_ID = " . $bolPneu->idBolPneu
-                . " AND "
-                . " DTHR_CEL = TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') ";
+                        . " ID AS ID "
+                    . " FROM "
+                        . " PMP_BOLETIM "
+                    . " WHERE "
+                        . " CEL_ID = " . $bolPneu->idBolPneu
+                        . " AND "
+                        . " DTHR_CEL = TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') ";
 
         $this->Conn = parent::getConn();
         $this->Read = $this->Conn->prepare($select);
@@ -66,23 +66,23 @@ class BoletimPneuDAO extends Conn {
     public function insBoletimPneu($bolPneu, $tipoAplic) {
 
         $sql = "INSERT INTO PMP_BOLETIM ("
-                . " FUNC_ID "
-                . " , EQUIP_ID "
-                . " , DTHR "
-                . " , DTHR_CEL "
-                . " , DTHR_TRANS "
-                . " , TIPO_APLIC "
-                . " , CEL_ID "
-                . " ) "
-                . " VALUES ("
-                . " " . $bolPneu->idFuncBolPneu
-                . " , " . $bolPneu->idEquipBolPneu
-                . " , TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') "
-                . " , TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') "
-                . " , SYSDATE "
-                . " , " . $tipoAplic
-                . " , " . $bolPneu->idBolPneu
-                . " )";
+                            . " FUNC_ID "
+                            . " , EQUIP_ID "
+                            . " , DTHR "
+                            . " , DTHR_CEL "
+                            . " , DTHR_TRANS "
+                            . " , TIPO_APLIC "
+                            . " , CEL_ID "
+                            . " ) "
+                        . " VALUES ("
+                            . " " . $bolPneu->idFuncBolPneu
+                            . " , " . $bolPneu->idEquipBolPneu
+                            . " , TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') "
+                            . " , TO_DATE('" . $bolPneu->dthrBolPneu . "','DD/MM/YYYY HH24:MI') "
+                            . " , SYSDATE "
+                            . " , " . $tipoAplic
+                            . " , " . $bolPneu->idBolPneu
+                            . " )";
 
         $this->Conn = parent::getConn();
         $this->Create = $this->Conn->prepare($sql);
